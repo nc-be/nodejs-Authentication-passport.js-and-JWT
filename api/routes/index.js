@@ -1,0 +1,23 @@
+// CONFIGURACION DE LAS RUTAS/ROUTERS
+const express = require('express');   // LLAMAR PAQUETE EXPRESS
+const productsRouter = require('./products.router');  // IMPORTAR RUTA DE PRODUCTOS
+const usersRouter = require('./users.router');  // IMPORTAR RUTA DE USUARIOS
+const categoriesRouter = require('./categories.router');  // IMPORTAR RUTA DE CATEGORIAS
+const ordersRouter = require('./orders.router');  // IMPORTAR RUTA ORDERS
+const r2Router = require('./r2.router');  // IMPORTAR RUTA R2
+
+// ESTA FUNCION SE ENCARGA DE LA CONFIGURACION GENERAL DE TOAS LAS RUTAS
+function routerApi(app){
+    const router = express.Router();  // CREAR VARIABLE - RUTA MAESTRA
+    app.use('/api/v1', router); //  DEFINIR UN PAD GLOBAL PARA TODOS LOS ENDPOINTS EN LOS QUE SE USE 'router'
+
+  router.use('/products', productsRouter); // DEFINIR LA RUTA DE PRODUCTOS (LO QUE SIGNIFICA QUE LAS URLS localhost:3001/products/... SE DIRIGEN ACA)
+  router.use('/users', usersRouter); // USUARIOS
+  router.use('/categories', categoriesRouter); // CATEGORIAS
+  router.use('/orders', ordersRouter); // ORDERS
+  router.use('/r2', r2Router); // r2
+};
+// localhost:3001/api/v1/r2
+
+
+module.exports = routerApi; // EXPORTAR LA CONFIGURACION DE RUTAS
