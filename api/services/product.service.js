@@ -1,13 +1,16 @@
 // SERVICIOS DE LA PAGINA DE PRODUCTOS
 
 const { faker } = require('@faker-js/faker');// LLAMAR PAQUETE FAKER - Fake info generation (realistic - no sec risk)
-const boom = require('@hapi/boom') // LLAMAR PAQUETE BOOM - MANEJO DE ERRORES RESPETANDO LOS RESPONSIVE STATUS (299, 404, ETC)
+const boom = require('@hapi/boom'); // LLAMAR PAQUETE BOOM - MANEJO DE ERRORES RESPETANDO LOS RESPONSIVE STATUS (299, 404, ETC)
+const pool = require('../libs/postgres.pool');
 
 class ProductsService{
   // DEFINIR LOGICA E INTERACCIONES A NIVEL TRANSACCIONAL DE LOS DATOS
   constructor(){
     this.products=[]; // FUENTE DE DATOS MANEJADA EN MEMORIA (ARRAY QUE INICIA VACIO)
     this.generate(); // CADA VEZ QUE SE GENERE UNA INSTANCIA DE SERVICIO SE CREARA LA LISTA DE PRODUCTOS FALSA UTILIZANDO FAKER
+    this.pool = pool; // CREAR POOL DESDE LA CONEXION
+    this.pool.on('error', (err) => console.err(err)); // DEVUELVE MENSAJE DE ERROR DE CONEXION 'error' EN CASO QUE NO SE CREE EL POOL DE FORMA CORRECTA
   }
 
 /* CLASE 15: SE AÑADE COMPORTAMIENTO ASINCRONO A LOS SERIVCIOS
@@ -43,12 +46,15 @@ async create(data){
 
 // RETORNA EL OBJETO QUE CONTIENE TODOS LOS PRODUCTOS GENERADOS POR LA FUNCION generate()
 /* COMPORTAMIENTO ASINCRONO, DELAY = 2000ms */
-find(){
-  return new Promise ((resolve, reject)=>{
+async find(){
+  /* return new Promise ((resolve, reject)=>{
     setTimeout(() => {
       resolve(this.products);
     }, 2000);
-  })
+  }) */
+  const query = 'SELECT * FROM tasks'; // GENERAR QUERY PARA CUMPLIR SOLICITUD DEL SERVICIO
+  const rta = await this.pool.query(query); // EJECUTA QUERY DE FORMA ASINCRONA
+  return rta.rows; // RETORNA LA LISTA DE PRODUCTOS
 }
 
 // find RETORNA EL OBJETO CON EL MISMO 'id' ENVIADO POR EL USUARIO

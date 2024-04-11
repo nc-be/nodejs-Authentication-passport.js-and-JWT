@@ -17,7 +17,6 @@ class UserService {
     SELECT * FROM tasks - Selecciona todo el contenido de la tabla 'tasks'
     */
     return await rta.rows; // Retorna las columnas de la tabla 'tasks'
-    return [];
   }
 
   async findOne(id) {
