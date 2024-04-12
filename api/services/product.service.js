@@ -2,7 +2,7 @@
 
 const { faker } = require('@faker-js/faker');// LLAMAR PAQUETE FAKER - Fake info generation (realistic - no sec risk)
 const boom = require('@hapi/boom'); // LLAMAR PAQUETE BOOM - MANEJO DE ERRORES RESPETANDO LOS RESPONSIVE STATUS (299, 404, ETC)
-const pool = require('../libs/postgres.pool');
+const pool = require('../libs/postgres.pool');  // LLAMAR LA LIBRERIA 'postgres.pools'
 
 class ProductsService{
   // DEFINIR LOGICA E INTERACCIONES A NIVEL TRANSACCIONAL DE LOS DATOS
