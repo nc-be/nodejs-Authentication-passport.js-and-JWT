@@ -70,7 +70,8 @@ class ProductsService{
 
   //  --  Sequelize --  require('../libs/sequelize')
     const query = 'SELECT * FROM tasks'; // SEQUELIZE PERMITE SOLICITUD DIRECTA
-  /* const [data,metadata] = await sequelize.query(query); //  SEQUELIZE ENTREGA LA INFORMACION EN UN ARRAY (data o metadata)
+  /*
+    const [data,metadata] = await sequelize.query(query); //  SEQUELIZE ENTREGA LA INFORMACION EN UN ARRAY (data o metadata)
     return {data, metadata}; // RETORNA LA LISTA DE PRODUCTOS ('data' entrega solo la lista, 'metadata' entrega informacion mas detallada de los metodos, etc. que se usaron para obtener la lista)
   */
   //  NO METADATA
