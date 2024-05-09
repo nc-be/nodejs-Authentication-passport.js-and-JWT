@@ -26,7 +26,7 @@ const sequelize = new Sequelize(URI, {
   logging: console.log, // Default, displays the first parameter of the log function call
 });
 
-// CORRER LA FUNCION 'setupModels' DESPUES DE CREAR LA INSTACIA. 'setupModels' PARA REALIZAR LA CONFIGURACION INICIAL DE LOS MODELOS TRAIDA DE LA CARPETA ./../db  (const sequelize) - PARA ELLO SE NECESITA RECIBIR LA CONEXION
+// CORRER LA FUNCION 'setupModels' DESPUES DE CREAR LA INSTACIA (linea de codigo anterior). LA FUNCION 'setupModels' REALIZA LA CONFIGURACION INICIAL DE LOS MODELOS - PARA ELLO SE NECESITA RECIBIR LA CONEXION
 setupModels(sequelize);
 
 // SINCRONIZACION (TOMA LOS MODELOS Y CREA UNA ESTRUCTURA = LEE LOS MODELOS CONFIGURADOS EN setupModels Y CREA LA TABLA CORRESPONDIENTE)

@@ -33,6 +33,7 @@ const { updateUserSchema, createUserSchema, getUserSchema } = require('./../sche
 const router = express.Router();
 const service = new UserService();
 
+// GET  - FIND
 router.get('/', async (req, res, next) => {
   try {
     const categories = await service.find();
@@ -42,6 +43,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+// GET/:id  - FIND_ONE
 router.get('/:id',
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
@@ -55,6 +57,7 @@ router.get('/:id',
   }
 );
 
+//POST  - CREATE
 router.post('/',
   validatorHandler(createUserSchema, 'body'),
   async (req, res, next) => {
@@ -68,6 +71,7 @@ router.post('/',
   }
 );
 
+//PATCH - UPDATE
 router.patch('/:id',
   validatorHandler(getUserSchema, 'params'),
   validatorHandler(updateUserSchema, 'body'),
@@ -83,6 +87,7 @@ router.patch('/:id',
   }
 );
 
+//DELETE  - DELETE
 router.delete('/:id',
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {

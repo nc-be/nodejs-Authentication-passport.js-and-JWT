@@ -15,7 +15,13 @@ class UserService {
   }
 
   async create(data) {
+    /*
+    // CREAR USUARIO - ANTES DE IMPLEMENTAR ORM
     return data;
+    */
+    // CREAR USUARIO - DESPUES DE IMPLEMENTAR ORM
+    const newUser = await models.User.create(data); // El comando 'create' creara un usuario implementando la informacion recibida del esquema (data: id, email, password, role)
+    return newUser; // retornar usuario
   }
 
   async find() {
@@ -53,18 +59,42 @@ class UserService {
   }
 
   async findOne(id) {
-    return { id };
+    // UTILIZANDO ORM
+    const user = await models.User.findByPk(id); // 'findByPk' buscara el usuario con coincida con el 'id' obtenido
+    if (!user) {
+      // CONDICIONAL QUE REVISA SI EL USUARIO EXISTE O NO - El condicional utiliza el middleware creado con boom  ./../middlewares/error.handler
+      throw boom.notFound('User not found'); // Lanza (throw) el error para que sea atrapado (catch) y validado por el esquema de validacion de data entrante (validatorHandler - ./../routes/users.router -- ./../middlewares/validator.handler) TLDR El esquema se encarga de validar el error y enviar la respuesta 'User not found' en el caso de que sea un error
+    }
+    return user;
   }
 
   async update(id, changes) {
+    /*
+    // UTILIZANDO JOI
     return {
       id,
       changes,
     };
+    */
+
+    // UTILIZANDO ORM
+    // const user = await models.User.findByPk(); // 'findByPk' buscara el usuario con coincida con el 'id' obtenido
+    const user = await this.findOne(id); // Mejora de la linea de codigo anterior - lleva a cabo el comando 'findByPk' y aplica el condicional que detecta si existe o no un usuario que coincida con el 'id' - envia error 'User not found' en caso contrario
+    const rta = await user.update(changes); // Una vez se cuenta con el usuario (user) se aplican los cambios (changes) realizados sobre el utilizando el comando 'update'.
+    return rta; // Enviar los cambios como respuesta
   }
 
   async delete(id) {
+    /*
+    // UTILIZANDO JOI
     return { id };
+    */
+
+    // UTILIZANDO ORM
+    // const user = await models.User.findByPk(); // 'findByPk' buscara el usuario con coincida con el 'id' obtenido
+    const user = await this.findOne(id); // Mejora de la linea de codigo anterior - lleva a cabo el comando 'findByPk' y aplica el condicional que detecta si existe o no un usuario que coincida con el 'id' - envia error 'User not found' en caso contrario
+    await user.destroy(); // Una vez se cuenta con el usuario (user) se elimina de la lista de usuarios utilizando el comando 'update'.
+    return { id }; // Enviar el 'id' del usuario eliminado como respuesta
   }
 }
 
