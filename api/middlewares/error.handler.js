@@ -1,3 +1,5 @@
+const { ValidationError } = require("sequelize");
+
 // DETECTA ERRORES GLOBALES
 function midError(err,req,res,next) {
   console.log('midError on...');  // MENSAJE EN CONSOLA PARA VERIFICAR ORDEN DE EJECUCION (DEBE SER 1ro YA QUE AQUI SE EJECUTA UN next LUEGO DE MONITOREAR EL ERROR)
@@ -29,6 +31,20 @@ function boomError(err,req,res,next) {
   };
 };
 
-module.exports = { midError,clientError,boomError };  // EXPORTAR TODOS LOS MIDDLEWARES
+// ESTE MIDDLEWARE SE ENCARGA DE LOS REQUISITOS DE LOS ESQUEMAS UTILIZADOS POR ORM
+function ormErrorHandler(err, req, res, next){
+  // EL CONDICIONAL 'if' VALIDA SI EL ERROR ES DE TIPO 'ValidationError' - 'ValidationError' ES LA INSTANCIA UTILIZADA POR sequelize PARA LA DETECCION DE ERRORES, POR LO TANTO SI ES DE TIPO 'ValidationError' ES UN ERROR DE ORM(sequelize)
+  if(err instanceof ValidationError){
+    // LOS ERRORES SE CLASIFICAN CON EL ESTATUS '409'
+    res.status(409).json({
+      statusCode: 409,
+      message: err.name,  // IMPRIME EL NOMBRE DEL ERROR
+      error: err.errors // IMPRIME LA DESCRIPCION DEL ERROR (NO SE IMPRIME CORRECTAMENTE????)
+    });
+  }
+  next(err);
+}
+
+module.exports = { midError,clientError,boomError,ormErrorHandler };  // EXPORTAR TODOS LOS MIDDLEWARES
 
 /* NOTA: LOS MIDDLEWARE DE TIPO ERROR SE DEBEN REALIZAR DESPUES DE DEFINIR EL ROUTING */

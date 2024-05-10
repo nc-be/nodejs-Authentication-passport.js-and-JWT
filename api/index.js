@@ -6,7 +6,7 @@ const app = express();    //  CONSTRUIR APLICACION
 const port = process.env.PORT || 3001;    // DEFINIR PUERTO DEL SERVIDOR
 
 
-const { midError,clientError,boomError } = require('./middlewares/error.handler'); // LLAMAR LA CARPETA MIDDLEWARES, midError SE ENCARGA DE ERRORES GLOBALES, clientError SE ENCARGA DE COMUNICAR ERRRORES CON EL USUARIO, boomError SE ENCARGA DE ERRORES CON UN MANEJO CORRECTO DEL RESPONSIVE STATUS
+const { midError,clientError,boomError, ormErrorHandler } = require('./middlewares/error.handler'); // LLAMAR LA CARPETA MIDDLEWARES, midError SE ENCARGA DE ERRORES GLOBALES, clientError SE ENCARGA DE COMUNICAR ERRRORES CON EL USUARIO, boomError SE ENCARGA DE ERRORES CON UN MANEJO CORRECTO DEL RESPONSIVE STATUS
 
 app.use(express.json());  // SE UTILIZA PARA REVISION INFORMACION DE TIPO JSON RECIBIDA POR POST  - INSOMNIAS
 
@@ -50,6 +50,7 @@ app.get('/api', (req,res) =>{
 NOTA: SE EJECUTAN EN EL ORDEN EN QUE SE PONGAN - COMPORTAMIENTO SECUENCIAL
 */
 app.use(midError);
+app.use(ormErrorHandler);
 app.use(boomError);
 app.use(clientError);
 
