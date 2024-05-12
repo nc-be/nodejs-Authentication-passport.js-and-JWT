@@ -1,0 +1,6 @@
+module.exports = {
+  'config':'./db/config.js/', // EN ESTE ARCHIVO SE ENCUENTRA LA CONFIGURACION (conexion a la base de datos)
+  'models-paths':'./db/models/', // EN ESTA CARPETA SE ENCUENTRAN LOS MODELOS
+  'migrations-paths':'./db/migrations/', // EN ESTA CARPETA SE ENCUENTRAN LAS MIGRACIONES
+  'seeders-paths':'./db/seeders/' // EN ESTA CARPETA SE ENCUENTRAN LAS SEMILLAS DE INFORMACION (Dentro se realize una carga masiva de datos)
+}
