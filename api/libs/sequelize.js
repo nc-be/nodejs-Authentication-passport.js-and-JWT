@@ -29,7 +29,13 @@ const sequelize = new Sequelize(URI, {
 // CORRER LA FUNCION 'setupModels' DESPUES DE CREAR LA INSTACIA (linea de codigo anterior). LA FUNCION 'setupModels' REALIZA LA CONFIGURACION INICIAL DE LOS MODELOS - PARA ELLO SE NECESITA RECIBIR LA CONEXION
 setupModels(sequelize);
 
-// SINCRONIZACION (TOMA LOS MODELOS Y CREA UNA ESTRUCTURA = LEE LOS MODELOS CONFIGURADOS EN setupModels Y CREA LA TABLA CORRESPONDIENTE)
+/*
+// SINCRONIZACION (TOMA LOS MODELOS Y CREA UNA ESTRUCTURA = LEE LOS MODELOS CONFIGURADOS EN setupModels Y CREA LA TABLA CORRESPONDIENTE)  - TLDR: Genera las tablas
+
+// Se deshabilita en las clases 13-14 ya que es que mejor trabajar con migraciones (revisar notas para mas detalles)
+
 sequelize.sync();
+*/
+
 
 module.exports = sequelize; // EXPORTAR CAPA DE CONEXION
