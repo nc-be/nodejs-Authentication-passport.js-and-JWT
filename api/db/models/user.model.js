@@ -28,6 +28,11 @@ const UserSchema = {
     field: 'create_at',         // De esta forma se crean registros en la base de datos (osea en javascript se maneja como 'createAt' y en la base de datos se nombran como 'create_at')
     defaultValue: Sequelize.NOW // Momento en el que se inserta este registro en la base de datos (NOW/ahora)
   },
+  role:{
+    allowNull: false,           // No permite valor nulo
+    type: DataTypes.STRING,     // Tipo de dato (STRING)
+    defaultValue: 'customer'    // Su valor por defecto es de tipo 'customer' (??)
+  }
 }
 
 // --IMPORTATE-- Definir una clase para el modelo (con Model se extienden todas las formas posibles de hacer queries con SQL)
