@@ -40,6 +40,7 @@ class User extends Model {
   //  Creacion de metodos estaticos (Estatico: No es necesario declararlos para acceder a los metodos)
   static associate(){
     //associate - En esta parte se definen todas las relaciones (?)
+
   }
 
   // Configuracion estatica de la conexion (recibe como parametro la conexion 'sequelize')

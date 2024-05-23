@@ -1,6 +1,8 @@
 //  - FALTA ANALIZAR
 const Joi = require('joi');
+const { emit } = require('nodemon');
 
+// PARAMETROS: id, email, password, role
 const id = Joi.number().integer();
 const email = Joi.string().email();
 const password = Joi.string().min(8);
@@ -12,7 +14,7 @@ const createUserSchema = Joi.object({
   role: role.required()
 });
 
-// Para llevar a cabo el servicio 'update' es necesario 1 de 2 parametros cualquiera: email y role (2 por el momento, ya que role esta deshabilitado)
+// Para llevar a cabo el servicio 'update' es necesario 1 de 3 parametros cualquiera: email, password y role
 
 // ^^^^^^VERIFICAR SI ES CIERTO^^^^^^
 const updateUserSchema = Joi.object({
