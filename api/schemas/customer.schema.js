@@ -6,10 +6,12 @@ const name = Joi.string().min(3).max(30);
 const lastName = Joi.string();
 const phone = Joi.string();
 
-// PARAMETROS LIGADOS AL USUARIO
+// PARAMETROS LIGADOS AL USUARIO  - OPTION 1
 const userId = Joi.number().integer();
-/* const email = Joi.string().email();
-const password = Joi.string(); */
+
+// PARAMETROS LIGADOS AL USUARIO  - OPTION 2
+const email = Joi.string().email();
+const password = Joi.string();
 
 const getCustomerSchema = Joi.object({
   id:id.required()
@@ -22,12 +24,16 @@ const createCustomerSchema = Joi.object({
   phone:phone.required(),
 
   // PARAMETROS LIGADOS AL USUARIO
-  userId:userId.required(),
-  /* user:Joi.object({
+  // userId - OPTION 1 - En esta opcion se requiere el userId
+  /*userId:userId.required(),
+   */
+
+  // Datos de usuario directos  - OPTION 2  - En esta opcion se requiere el email y password en forma de objeto "user":{}
+  user:Joi.object({
     email:email.required(),
     password:password.required()
     }
-  )*/
+  )
   }
 );
 
@@ -37,7 +43,16 @@ const updateCustomerSchema = Joi.object({
   phone,
 
   // PARAMETROS LIGADOS AL USUARIO
-  userId
+  // userId - OPTION 1 - En esta opcion se requiere el userId
+  /* userId */
+
+
+  // Datos de usuario directos  - OPTION 2  - En esta opcion se requiere el email y password en forma de objeto "user":{}
+  user:Joi.object({
+    email:email,
+    password:password
+    }
+  )
   }
 );
 

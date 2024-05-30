@@ -43,18 +43,27 @@ class UserService {
     return rta.rows; // RETORNA LA LISTA DE PRODUCTOS
     */
 
+    // servicio 'find' con sequelize
     /*
     SINTAXIS
     const serviceResponse = await models.User_Name.Service_name();
 
     DONDE:
-    rta = Es la respuesta final del servidor (serviceResponse)
+    serviceResponse = Es la respuesta final del servidor (rta)
     models = Es el nameSpace creado con la funcion 'setupModels' donde se guarda la forma en la cual se acceden a los modelos
     User_Name = Es el nombre del modelo definido en la configuracion estatica de los modelos ./../db/user.model - mismo nombre de la clase -
     Service_name = Nombre del servicio, findAll, update, delete, patch, etc
     */
-    // servicio 'find' con sequelize
-    const rta = await models.User.findAll();
+    const rta = await models.User.findAll({include:['customer']});
+    // Dentro del servicio se agrega la expresion {include:['customer']}
+    /*
+    'customer' HACE REFERENCIA A LA ASOCIACION BelongsTo ENTRE EL MODELO 'user.model.js' Y EL MODELO 'customer.model.js' Donde 'customer' ES EL ALIAS QUE SE LE DA A LA RELACION
+
+    SINTAXIS
+    {{include:[asociacion1, asociacion2, asociacion3, ...]}
+
+    INCLUDE SE ENCARGA DE RESOLVER LAS ASOCIACIONES (asociacion1, asociacion2,...) Y ANIDAR LOS RESULTADOS A LA RESPUESTA FINAL DEL SERVIDOR (rta)
+    */
     return rta;
   }
 

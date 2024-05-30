@@ -1,6 +1,7 @@
 // MODELO EN LOS QUE SE DEFINEN LOS ESQUEMAS DE LA BASE DE DATOS (USERS)
 
 const { Model, DataTypes, Sequelize } = require('sequelize'); // LLAMAR UTILIDADES Model, DataTypes y Sequelize del paquete sequelize
+const { withSqliteForeignKeysOff } = require('sequelize/lib/dialects/sqlite/sqlite-utils');
 
 const USER_TABLE = 'users'; // DEFINIR EL NOMBRE DE LA TABLA
 
@@ -38,9 +39,19 @@ const UserSchema = {
 // --IMPORTATE-- Definir una clase para el modelo (con Model se extienden todas las formas posibles de hacer queries con SQL)
 class User extends Model {
   //  Creacion de metodos estaticos (Estatico: No es necesario declararlos para acceder a los metodos)
-  static associate(){
-    //associate - En esta parte se definen todas las relaciones (?)
+  static associate(models){
+    //associate - En esta parte se definen todas las relaciones
 
+    /* RELACION hasOne con 'Customer' DESDE EL LADO DE 'User'
+
+    SINTAXIS:
+    this.hasOne(Model, Alias);
+
+    Model: Hacia que modelo tiene la relacion (en esta caso, user)
+    Alias: alias que tendra la relacion
+    */
+    this.hasOne(models.Customer, {as: 'customer', foreignKey: 'userId'});
+    // ESTE METODO DEFINE LA RELACION, EL METODO SE EJECUTA EN EL ARCHIVO index.js
   }
 
   // Configuracion estatica de la conexion (recibe como parametro la conexion 'sequelize')

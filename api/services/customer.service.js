@@ -11,14 +11,30 @@ class CustomerService {
   constructor(){}
 
   async create(data) {
-    // INVESTIGAR '{include:['user']}'
     const newCustomer = await models.Customer.create(data, {include:['user']});
+    // Dentro del servicio se agrega la expresion {include:['user']}
+    /*
+    'user' HACE REFERENCIA A LA ASOCIACION BelongsTo ENTRE EL MODELO 'customer.model.js' Y EL MODELO 'user.model.js' Donde 'user' ES EL ALIAS QUE SE LE DA A LA RELACION
+
+    SINTAXIS
+    {{include:[asociacion1, asociacion2, asociacion3, ...]}
+
+    INCLUDE SE ENCARGA DE RESOLVER LAS ASOCIACIONES (asociacion1, asociacion2,...) Y ANIDAR LOS RESULTADOS A LA RESPUESTA FINAL DEL SERVIDOR (rta)
+    */
     return newCustomer;
   }
 
   async find() {
-    // INVESTIGAR '{include:['user']}'
     const rta = await models.Customer.findAll({include:['user']});
+    // Dentro del servicio se agrega la expresion {include:['user']}
+    /*
+    'user' HACE REFERENCIA A LA ASOCIACION BelongsTo ENTRE EL MODELO 'customer.model.js' Y EL MODELO 'user.model.js' Donde 'user' ES EL ALIAS QUE SE LE DA A LA RELACION
+
+    SINTAXIS
+    {{include:[asociacion1, asociacion2, asociacion3, ...]}
+
+    INCLUDE SE ENCARGA DE RESOLVER LAS ASOCIACIONES (asociacion1, asociacion2,...) Y ANIDAR LOS RESULTADOS A LA RESPUESTA FINAL DEL SERVIDOR (rta)
+    */
     return rta;
   }
 

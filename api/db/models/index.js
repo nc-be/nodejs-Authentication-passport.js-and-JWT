@@ -19,6 +19,7 @@ function setupModels(sequelize) {
 
   // EJECUCION DE LOS METODOS DE LAS ASOCIACIONES CREADAS EN LOS MODELOS, REQUIEREN QUE SE LES ENVIEN LOS MODELOS DE SEQUELIZE
   Customer.associate(sequelize.models); // Asociaciones del modelo 'Customer.model'
+  User.associate(sequelize.models); // Asociaciones del modelo 'User.model'
   /* User.associate(sequelize.models);
   Category.associate(sequelize.models);
   Product.associate(sequelize.models); */
