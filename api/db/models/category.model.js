@@ -33,6 +33,17 @@ const CategorySchema = {
 class Category extends Model {
   //  Creacion de metodos estaticos (Estatico: No es necesario declararlos para acceder a los metodos)
   static associate(models) {
+    /* RELACION hasMany CON 'Product' DESDE EL LADO DE 'Category'
+
+    SINTAXIS:
+    this.hasMany(Model, {Alias, Llave});
+
+    Modelo: Hacia que modelo tiene la relacion (en esta caso, user)
+    Alias: Alias que tendra la relacion
+    Llave: Aqui se resuelve la relacion
+    */
+    this.hasMany(models.Product,{as: 'product',foreignKey: 'categoryId'});
+    // ESTE METODO DEFINE LA RELACION, EL METODO SE EJECUTA EN EL ARCHIVO index.js
   }
   // Configuracion estatica de la conexion (recibe como parametro la conexion 'sequelize')
   static config(sequelize) {

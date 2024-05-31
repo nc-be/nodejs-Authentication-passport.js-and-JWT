@@ -5,7 +5,6 @@ const usersRouter = require('./users.router');  // IMPORTAR RUTA DE USUARIOS
 const customersRouter = require('./customers.router');  // IMPORTAR RUTA DE USUARIOS
 const categoriesRouter = require('./categories.router');  // IMPORTAR RUTA DE CATEGORIAS
 const ordersRouter = require('./orders.router');  // IMPORTAR RUTA ORDERS
-const r2Router = require('./r2.router');  // IMPORTAR RUTA R2
 
 
 // ESTA FUNCION SE ENCARGA DE LA CONFIGURACION GENERAL DE TOAS LAS RUTAS
@@ -18,7 +17,6 @@ function routerApi(app){
   router.use('/users', usersRouter); // CLIENTES
   router.use('/categories', categoriesRouter); // CATEGORIAS
   router.use('/orders', ordersRouter); // ORDERS
-  router.use('/r2', r2Router); // r2
 };
 // localhost:3001/api/v1/r2
 

@@ -2,12 +2,12 @@
 
 const { Model, DataTypes, Sequelize } = require('sequelize'); // LLAMAR UTILIDADES Model, DataTypes y Sequelize del paquete sequelize
 
-const { CATEGORY_TABLE } = require('./category.model'); // LLAMAR LA TABLA DEL MODELO DE CATEGORIAS
+const { CATEGORY_TABLE } = require('./category.model'); // LLAMAR LA TABLA DEL MODELO DE CATEGORIAS (NECESARIA PARA EL ATRIBUTO categoryId)
 
 const PRODUCT_TABLE = 'products'; // DEFINIR EL NOMBRE DE LA TABLA
 
 const ProductSchema = {
-  // DEFINIR ATRIBUTOS DEL ESQUEMA (id, name, image, description, price, createAt)
+  // DEFINIR ATRIBUTOS DEL ESQUEMA (id, name, image, description, price, createAt, categoryId)
   id: {
     allowNull: false,            // No permite valor nulo
     autoIncrement: true,         // Permite que el campo sea autoincrementable
@@ -40,6 +40,7 @@ const ProductSchema = {
     field: 'category_id',         // Nombre del campo en la base de datos
     allowNull: false,             // No permite valor nulo
     type: DataTypes.INTEGER,      // Tipo de dato (INTEGER)
+    // EN ESTE CASO NO ES NECESARIO QUE EL DATO SEA UNICO PORQUE SE QUIERE RELACIONAR CATEGORIA A MULTIPLES PRODUCTOS (Caso contrario a la relacion 1on1 entre customers y users)
     references: {
       model: CATEGORY_TABLE,      // Este atributo esta relacionado a la tabla de categorias
       key: 'id'                   // Referencia de la otra tabla (atributo `id`)
@@ -53,6 +54,7 @@ const ProductSchema = {
 class Product extends Model {
   //  Creacion de metodos estaticos (Estatico: No es necesario declararlos para acceder a los metodos)
   static associate(models) {
+    this.belongsTo(models.Category, {as: 'category'});
   }
   // Configuracion estatica de la conexion (recibe como parametro la conexion 'sequelize')
   static config(sequelize) {

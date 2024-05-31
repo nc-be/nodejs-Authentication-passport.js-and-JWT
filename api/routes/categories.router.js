@@ -1,5 +1,5 @@
 /*
-//  RUTA DE USUARIOS (ANTERIOR)
+//  RUTA DE PRODUCTOS (ANTERIOR)
 const express = require('express');   // LLAMAR PAQUETE EXPRESS
 
 const router = express.Router();    //  CONSTRUIR APLICACION

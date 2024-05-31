@@ -59,9 +59,9 @@ class Customer extends Model {
     /* RELACION belongsTo con 'User' DESDE EL LADO DE 'Customer'
 
     SINTAXIS:
-    this.belongsTo(Model, Alias);
+    this.belongsTo(Model, {Alias});
 
-    Model: Hacia que modelo tiene la relacion (en esta caso, user)
+    Modelo: Hacia que modelo tiene la relacion (en esta caso, user)
     Alias: alias que tendra la relacion
     */
     this.belongsTo(models.User, {as: 'user'});
