@@ -1,42 +1,40 @@
-// FALTA ANALIZAR
-const { Model, DataTypes, Sequelize } = require('sequelize');
+// MODELO EN LOS QUE SE DEFINEN LOS ESQUEMAS DE LA BASE DE DATOS (CATEGORIES)
 
-const CATEGORY_TABLE = 'categories';
+const { Model, DataTypes, Sequelize } = require('sequelize'); // LLAMAR UTILIDADES Model, DataTypes y Sequelize del paquete sequelize
+
+const CATEGORY_TABLE = 'categories'; // DEFINIR EL NOMBRE DE LA TABLA
 
 const CategorySchema = {
+  // DEFINIR ATRIBUTOS DEL ESQUEMA (id, name, image, createAt)
   id: {
-    allowNull: false,
-    autoIncrement: true,
-    primaryKey: true,
-    type: DataTypes.INTEGER
+    allowNull: false,           // No permite valor nulo
+    autoIncrement: true,        // Permite que el campo sea autoincrementable
+    primaryKey: true,           // Si es primaryKey (?????)
+    type: DataTypes.INTEGER     // Tipo de dato (INT)
   },
   name: {
-    type: DataTypes.STRING,
-    unique: true,
-    allowNull: false,
+    allowNull: false,           // No permite valor nulo
+    type: DataTypes.STRING,     // Tipo de dato (STRING)
+    unique: true               // Dato unico
   },
   image: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false,           // No permite valor nulo
+    type: DataTypes.STRING      // Tipo de dato (STRING)
   },
   createdAt: {
-    allowNull: false,
-    type: DataTypes.DATE,
-    field: 'created_at',
-    defaultValue: Sequelize.NOW,
+    allowNull: false,           // No permite valor nulo
+    type: DataTypes.DATE,       // Tipo de dato (DATE)
+    field: 'created_at',        // Nombre del campo en la base de datos
+    defaultValue: Sequelize.NOW // Momento en el que se inserta este registro en la base de datos (NOW/ahora)
   },
 }
 
-
+// --IMPORTATE-- Definir una clase para el modelo (con Model se extienden todas las formas posibles de hacer queries con SQL)
 class Category extends Model {
-
+  //  Creacion de metodos estaticos (Estatico: No es necesario declararlos para acceder a los metodos)
   static associate(models) {
-    this.hasMany(models.Product, {
-      as: 'products',
-      foreignKey: 'categoryId'
-    });
   }
-
+  // Configuracion estatica de la conexion (recibe como parametro la conexion 'sequelize')
   static config(sequelize) {
     return {
       sequelize,
@@ -47,4 +45,4 @@ class Category extends Model {
   }
 }
 
-module.exports = { Category, CategorySchema, CATEGORY_TABLE };
+module.exports = { Category, CategorySchema, CATEGORY_TABLE }; // EXPORTAR

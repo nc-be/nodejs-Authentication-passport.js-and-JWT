@@ -1,67 +1,69 @@
-// FALTA ANALIZAR
-const { Model, DataTypes, Sequelize } = require('sequelize');
+// MODELO EN LOS QUE SE DEFINEN LOS ESQUEMAS DE LA BASE DE DATOS (CATEGORIES)
 
-const { CATEGORY_TABLE } = require('./category.model');
+const { Model, DataTypes, Sequelize } = require('sequelize'); // LLAMAR UTILIDADES Model, DataTypes y Sequelize del paquete sequelize
 
-const PRODUCT_TABLE = 'products';
+const { CATEGORY_TABLE } = require('./category.model'); // LLAMAR LA TABLA DEL MODELO DE CATEGORIAS
+
+const PRODUCT_TABLE = 'products'; // DEFINIR EL NOMBRE DE LA TABLA
 
 const ProductSchema = {
+  // DEFINIR ATRIBUTOS DEL ESQUEMA (id, name, image, description, price, createAt)
   id: {
-    allowNull: false,
-    autoIncrement: true,
-    primaryKey: true,
-    type: DataTypes.INTEGER
+    allowNull: false,            // No permite valor nulo
+    autoIncrement: true,         // Permite que el campo sea autoincrementable
+    primaryKey: true,            // Si es primaryKey (?????)
+    type: DataTypes.INTEGER      // Tipo de dato (INT)
   },
   name: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false,             // No permite valor nulo
+    type: DataTypes.STRING,       // Tipo de dato (STRING)
   },
   image: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false,             // No permite valor nulo
+    type: DataTypes.STRING        // Tipo de dato (STRING)
   },
   description: {
-    type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: false,             // No permite valor nulo
+    type: DataTypes.TEXT          // Tipo de dato (TEXT)
   },
   price: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: false,             // No permite valor nulo
+    type: DataTypes.INTEGER       // Tipo de dato (INTEGER)
   },
   createdAt: {
-    allowNull: false,
-    type: DataTypes.DATE,
-    field: 'created_at',
-    defaultValue: Sequelize.NOW,
+    allowNull: false,             // No permite valor nulo
+    type: DataTypes.DATE,         // Tipo de dato (DATE)
+    field: 'created_at',          // Nombre del campo en la base de datos
+    defaultValue: Sequelize.NOW   // Momento en el que se inserta este registro en la base de datos (NOW/ahora)
   },
   categoryId: {
-    field: 'category_id',
-    allowNull: false,
-    type: DataTypes.INTEGER,
+    field: 'category_id',         // Nombre del campo en la base de datos
+    allowNull: false,             // No permite valor nulo
+    type: DataTypes.INTEGER,      // Tipo de dato (INTEGER)
     references: {
-      model: CATEGORY_TABLE,
-      key: 'id'
+      model: CATEGORY_TABLE,      // Este atributo esta relacionado a la tabla de categorias
+      key: 'id'                   // Referencia de la otra tabla (atributo `id`)
     },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onUpdate: 'CASCADE',          // Que hacer cuando se actualize el id (comportamiento en cascada ??)
+    onDelete: 'SET NULL'          // Que hacer cuando se elimine el id (Establecer en nulo)
   }
 }
 
-
+// --IMPORTATE-- Definir una clase para el modelo (con Model se extienden todas las formas posibles de hacer queries con SQL)
 class Product extends Model {
-
+  //  Creacion de metodos estaticos (Estatico: No es necesario declararlos para acceder a los metodos)
   static associate(models) {
-    this.belongsTo(models.Category, { as: 'category' });
   }
-
+  // Configuracion estatica de la conexion (recibe como parametro la conexion 'sequelize')
   static config(sequelize) {
     return {
-      sequelize,
-      tableName: PRODUCT_TABLE,
-      modelName: 'Product',
-      timestamps: false
+      // Retorna los siguientes parametros
+      sequelize,  // Conexion
+      tableName: PRODUCT_TABLE, //  Nombre de la tabla
+      modelName: 'Product', //  Nombre del modelo (tiene el mismo nombre de la clase en la que este)
+      timestamps: false //  Deshabilitar los campos por defecto 'timestamps'
     }
   }
 }
 
-module.exports = { Product, ProductSchema, PRODUCT_TABLE };
+module.exports = { Product, ProductSchema, PRODUCT_TABLE }; // EXPORTAR
