@@ -1,8 +1,6 @@
 // MISMA LOGICA DE PROGRAMACION USADA EN ./user.service.js
 const boom = require('@hapi/boom');
 
-const pool = require('../libs/postgres.pool');
-
 const { models } = require('./../libs/sequelize');
 
 class CustomerService {
@@ -53,10 +51,9 @@ class CustomerService {
   }
 
   async delete(id) {
-    // EN EL EJEMPLO SE USA const model Y NO customer (?)
     const customer = await this.findOne(id);
     await customer.destroy();
-    return { rta:true }; // NO SE ENVIA EL { id } SINO QUE ESTA RESPUESTA
+    return { rta:true };
   }
 }
 

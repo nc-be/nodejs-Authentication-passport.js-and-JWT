@@ -1,7 +1,7 @@
 // - FALTA ANALIZAR
 const Joi = require('joi');
 
-const id = Joi.number().integer();
+const id = Joi.number().integer();  // 'id' AUTOINCREMENTAL
 const name = Joi.string().min(3).max(15);
 const image = Joi.string().uri();
 

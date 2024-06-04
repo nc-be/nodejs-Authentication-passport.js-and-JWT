@@ -4,12 +4,11 @@ const Joi = require('joi'); // LLAMAR PAQUETE JOI
 /* DEFINIR CADA UNO DE LOS CAMPOS: id, name, description Y price */
 
 // id
-const id = Joi.string()
-.uuid(); // EL id ES TIPO string Y uuid (valor de 128 bits)
+const id = Joi.number()
+.integer();   // 'id' AUTOINCREMENTAL
 
 // name
 const name = Joi.string() // EL nombre (name) ES TIPO string
-.alphanum() // SU VALOR ES alfanumerico
 .min(3) // TIENE UN MINIMO DE 3 caracteres
 .max(15) // TIENE UN MAXIMO DE 15 caracteres
 
@@ -27,6 +26,10 @@ const description = Joi.string() // LA imagen (image) ES TIPO string
 const image = Joi.string() // LA imagen (image) ES TIPO string
 .uri() // DEBE SER UNA url
 
+//categoryId
+const categoryId = Joi.number()
+.integer();   // 'id' AUTOINCREMENTAL
+
 /* ESQUEMAS */
 
 // ESQUEMA PARA LA CREACION (SERVICIO create/post) - REUNE TODOS LOS CAMPOS REQUERIDOS O NO PARA LLEVAR A CABO EL SERVICIO (name, price, image)
@@ -34,7 +37,8 @@ const creteProductSchema = Joi.object({
   name: name.required(),  // REQUERIDO: OBLIGATORIO TENER ESTE CAMPO
   price: price.required(),
   description: description.required(),
-  image: image.required()
+  image: image.required(),
+  categoryId: categoryId.required()
 });
 
 // ESQUEMA PARA LA ACTUALIZACION DE DATOS (SERVICIO update) - REUNE TODOS LOS CAMPOS REQUERIDOS O NO PARA LLEVAR A CABO EL SERVICIO (name, price, image)
@@ -42,7 +46,8 @@ const updateProductSchema = Joi.object({
   name: name,  // NO REQUERIDO: OPCIONAL TENER ESTE CAMPO
   price: price,
   description: description,
-  image: image
+  image: image,
+  categoryId
 });
 
 // ESQUEMA PARA LA OBTENCION DE DATOS (SERVICIO get) - REUNE TODOS LOS CAMPOS REQUERIDOS O NO PARA LLEVAR A CABO EL SERVICIO (id)

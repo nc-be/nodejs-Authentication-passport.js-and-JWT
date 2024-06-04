@@ -14,8 +14,8 @@ function setupModels(sequelize) {
 
   User.init(UserSchema, User.config(sequelize));  // Esquema de usuarios
   Customer.init(CustomerSchema, Customer.config(sequelize));  // Esquema de clientes
-  Category.init(UserSchema, Category.config(sequelize));  // Esquema de categorias
-  Product.init(UserSchema, Product.config(sequelize));  // Esquema de productos
+  Category.init(CategorySchema, Category.config(sequelize));  // Esquema de categorias
+  Product.init(ProductSchema, Product.config(sequelize));  // Esquema de productos
 
   // EJECUCION DE LOS METODOS DE LAS ASOCIACIONES CREADAS EN LOS MODELOS, REQUIEREN QUE SE LES ENVIEN LOS MODELOS DE SEQUELIZE
   Customer.associate(sequelize.models); // Asociaciones del modelo 'Customer.model'
