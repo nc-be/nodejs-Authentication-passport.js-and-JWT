@@ -49,7 +49,7 @@ class User extends Model {
 
     Modelo: Hacia que modelo tiene la relacion (en esta caso, user)
     Alias: Alias que tendra la relacion
-    Llave: Aqui se resuelve la relacion
+    Llave: Llave de esta relacion
     */
     this.hasOne(models.Customer, {as: 'customer', foreignKey: 'userId'});
     // ESTE METODO DEFINE LA RELACION, EL METODO SE EJECUTA EN EL ARCHIVO index.js

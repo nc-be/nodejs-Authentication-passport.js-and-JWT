@@ -40,6 +40,24 @@ class Order extends Model {
   static associate(models) {
     // LA ORDEN PERTENECE A VARIOS CLIENTES
     this.belongsTo(models.Customer, {as: 'customer'});
+    /* RELACION belongsToMany CON 'Product' DESDE EL LADO DE 'Order'
+
+    SINTAXIS:
+    this.belongsToMany(Model, {Alias, Interm, Llave, Llave2});
+
+    Modelo: Hacia que modelo tiene la relacion (en esta caso, user)
+    Alias: Alias que tendra la relacion
+    Interm: Se encarga de resolver la relacion (Intermediario)
+    Llave: Llave de la relacion
+    Llave2: Llave de la relacion -  Modelo ligado
+    */
+    this.belongsToMany(models.Product, {
+      as: 'items',
+      through:models.OrderProduct,
+      foreignKey: 'orderId',
+      otherKey: 'productId'
+    }
+    );
   }
 
   static config(sequelize) {
