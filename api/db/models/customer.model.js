@@ -66,6 +66,7 @@ class Customer extends Model {
     */
     this.belongsTo(models.User, {as: 'user'});
     // ESTE METODO DEFINE LA RELACION, EL METODO SE EJECUTA EN EL ARCHIVO index.js
+    this.hasMany(models.Order, {as: 'order',foreignKey: 'customerId'});
   }
 
   // Configuracion estatica de la conexion (recibe como parametro la conexion 'sequelize')

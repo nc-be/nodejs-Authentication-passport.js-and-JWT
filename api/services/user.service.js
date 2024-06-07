@@ -54,7 +54,9 @@ class UserService {
     User_Name = Es el nombre del modelo definido en la configuracion estatica de los modelos ./../db/user.model - mismo nombre de la clase -
     Service_name = Nombre del servicio, findAll, update, delete, patch, etc
     */
-    const rta = await models.User.findAll({include:['customer']});
+    const rta = await models.User.findAll({
+      include:['customer']
+    });
     // Dentro del servicio se agrega la expresion {include:['customer']}
     /*
     'customer' HACE REFERENCIA A LA ASOCIACION BelongsTo ENTRE EL MODELO 'user.model.js' Y EL MODELO 'customer.model.js' Donde 'customer' ES EL ALIAS QUE SE LE DA A LA RELACION
