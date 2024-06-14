@@ -1,4 +1,3 @@
-// - FALTA ANALIZAR
 const Joi = require('joi'); // LLAMAR PAQUETE JOI
 
 /* DEFINIR CADA UNO DE LOS CAMPOS: id, name, description Y price */
@@ -30,10 +29,18 @@ const image = Joi.string() // LA imagen (image) ES TIPO string
 const categoryId = Joi.number()
 .integer();   // 'id' AUTOINCREMENTAL
 
+//limit
+const limit = Joi.number()
+.integer();
+
+//offset
+const offset = Joi.number()
+.integer();
+
 /* ESQUEMAS */
 
 // ESQUEMA PARA LA CREACION (SERVICIO create/post) - REUNE TODOS LOS CAMPOS REQUERIDOS O NO PARA LLEVAR A CABO EL SERVICIO (name, price, image)
-const creteProductSchema = Joi.object({
+const createProductSchema = Joi.object({
   name: name.required(),  // REQUERIDO: OBLIGATORIO TENER ESTE CAMPO
   price: price.required(),
   description: description.required(),
@@ -55,4 +62,10 @@ const getProductSchema = Joi.object({
   id: id.required()
 });
 
-module.exports = { creteProductSchema,updateProductSchema,getProductSchema };  // EXPORTAR TODOS LOS ESQUEMAS
+// ESQUEMA PARA LA PAGINACION - PIDE AL USUARIO INGRESAR LOS VALORES DE limit Y offset (AL MENOS UNO)
+const queryProductSchema = Joi.object({
+  limit: limit,
+  offset: offset
+});
+
+module.exports = { createProductSchema, updateProductSchema, getProductSchema, queryProductSchema };  // EXPORTAR TODOS LOS ESQUEMAS

@@ -31,10 +31,18 @@ class ProductsService {
   }
 
   // AQUI SE UTILIZAN LOS MODELOS
-  async find() {
-    const products = await models.Product.findAll({
-      include:['category']
-    });
+  async find(query) { // RECIBIR LOS PARAMETROS DE PAGINACION DE LA CONSTANTE 'query' OBTENIDA DEL ESQUEMA queryProductSchema
+    // OPCIONES ENVIADAS A EL SERVICIO findAll
+    const options={
+      include:['category']  // ASOCIACION category hasMany products (requerida)
+    };
+    const {limit, offset} = query;  // TRAER LOS PARAMETROS DE PAGINACION limit Y offset DE LA CONSTANTE 'query'
+    if (limit && offset) {
+      // SI limit && offset EXISTEN, INCLUIRLOS EN LA CONSTANTE options
+      options.limit=limit,
+      options.offset=offset
+    };
+    const products = await models.Product.findAll(options);
     return products;
   }
 

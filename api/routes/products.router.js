@@ -11,7 +11,7 @@ const ProductsService = require('../services/product.service') // LLAMAR EL ARCH
 
 /* CLASE 20 SE AÑADEN MIDDLEWARES A LA RUTA DE PRODUCTOS */
 const validatorHandler = require('../middlewares/validator.handler') // LLAMAR EL ARCHIVO 'validator.handler' DE LA CARPETA MIDDLEWARES
-const { creteProductSchema,updateProductSchema,getProductSchema } = require('../schemas/product.schema') // LLAMAR LOS 3 ESQUEMAS DE LA CARPETA SCHEMAS
+const { createProductSchema, updateProductSchema, getProductSchema, queryProductSchema } = require('../schemas/product.schema') // LLAMAR LOS 3 ESQUEMAS DE LA CARPETA SCHEMAS
 
 const router = express.Router();    //  CONSTRUIR APLICACION
 const service = new ProductsService();  // CREAR UNA INSTANCIA DE LA CLASE ProductsService
@@ -22,34 +22,18 @@ app.get('/products', (req,res) => {}    router.get('/', (req,res) => {}
 'products' no se especifica y app se reemplaza por router
 */
 
-router.get('/', async (req,res) => {
-// NORMALMENTE SE ENVIAN MENSAJE EN FORMATO json YA QUE EN backend SE COMUNICAN DATOS A frontend O aplicaciones mobiles QUE SE ENCARGAN DE RENDERIZAR LA INFORMACION
-
-/*ARRAY DE PRODUCTOS (GENERADOS POR fakerJS)
-
-FAKER SE ENCARGA DE GENERAR totalProducts(definir) PRODUCTOS FALSOS QUE SE GUARDARAN EN UN OBJETO CON LAS SIGUIENTES CARACTERISTICAS:
-
-**NOMBRE DEL PRODUCTO productName()
-**PRECIO DEL PRODUCTO price()   -   parseInt(,10) convierte el precio de string a numero entero base 10
-**IMAGEN DEL PRODCUTO imageUrl()
-*/
-
-/* const arrayProducts =[];
-const{ size }=req.query; // TRAER EL PARAMETRO size DE query
-const totalProducts= size || 10;// UTILIZANDO EL QUERY 'size' SE DEFINE EL NUMERO DE PRODUCTOS (|| 10 SI NO SE ESPECIFICA UN ?size EL TAMAÑO PREDETERMINADO ES 10)
-for(let i=0;i<totalProducts;i++){
-const id=i+1;
-arrayProducts.push({
-  id,
-  name:faker.commerce.productName(),
-  price:parseInt(faker.commerce.price(), 10),
-  image:faker.image.url()
-})
-} // MOVED - ./SERVICES/product.service */
-
-const products = await service.find();
-res.json(products);
-});// TEST:  localhost:'port'/products?size=X     X REPRESENTA LA CANTIDAD DE PRODUCTOS QUE SE GENERARAN
+router.get('/',
+  validatorHandler(queryProductSchema,'query'), // VALIDAR SI EXISTEN PARAMETROS EN EL ESQUEMA DE PAGINACION (limit, offset)
+  async (req,res) => {
+    try {
+      const queryParams = req.query;
+      const products = await service.find(queryParams);
+      res.json(products);
+    } catch (error) {
+      next(error);
+    }
+  }
+);// TEST:  localhost:'port'/products?size=X     X REPRESENTA LA CANTIDAD DE PRODUCTOS QUE SE GENERARAN
 // EJ:  localhost:3001/products?size=15
 
 // EJEMPLO DE RUTA FUNCIONAL  - YA QUE ES UN ENDPOINT ESPECIFICO (filter) SE DEBE PONER ANTES DE LOS ENDPOINTS DE FORMA DINAMICA (:id)
@@ -114,7 +98,7 @@ router.get('/filtro_disfuncional', (req,res) => {
 });// EJ: localhost:3001/products/filtro_disfuncional
 
 // EJEMPLO .post  - CREAR PRODUCTOS
-router.post('/', validatorHandler(creteProductSchema,'body'), async (req,res) => {
+router.post('/', validatorHandler(createProductSchema,'body'), async (req,res) => {
   const body = req.body;  //  RECIBIR PARAMETROS PROVENIENTES DE INSOMNIA CON EL ATRIBUTO 'body'
 
   // EJEMPLO RESPUESTA JSON SIN CONFIGURACION DE ESTADO
