@@ -9,7 +9,7 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 const ORDER_TABLE = 'orders';
 
 const OrderSchema = {
-// DEFINIR ATRIBUTOS DEL ESQUEMA (id, customerId, createAt)
+// DEFINIR ATRIBUTOS DEL ESQUEMA (id, customerId, createAt, total)
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -32,6 +32,30 @@ const OrderSchema = {
     },
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL'
+  },
+
+  // PRECIO TOTAL DE UNA ORDEN DE COMPRA
+  total: {
+    type: DataTypes.VIRTUAL, //ESTE ATRIBUTO NO EXISTE REALMENTE DENTRO DE LA TABLA, SOLO EXISTE PARA CALCULAR EL VALOR TOTAL DE MANERA VIRTUAL
+    get() {
+      // ESTE CONDICIONAL VERIFICA QUE EXISTA ALGUN ITEM DENTRO DE LA ASOCIACION PARA PODER EMPEZAR A CALCULAR
+      /*
+      SINTAXIS: this.Objecto.length
+
+      El objeto en este caso es la asociacion la cual funciona como un objeto al usar el comando 'length' si existe algun objeto el indice aumenta a 1
+      */
+      if (this.items.length > 0) {
+        // 'reduce' CUMPLE LA FUNCION DE UN CICLO ?for'
+        /*
+        En teoria la funcion de 'reduce' monitorear los items de una orden de compras, despues de monitorear un item suma el valor de su precio*cantidad con la constante 'total' (que comienza en 0 incialmente). Este valor se convierte en el valor actual de 'total'
+        */
+        return this.items.reduce((total, item) => {
+          return total + (item.price * item.OrderProduct.amount);
+        }, 0);
+      }
+      // SI NO EXISTEN ITEMS DENTRO DE LA ORDEN EL VALOR DEL 'total' SERA 0
+      return 0;
+    }
   }
 }
 
