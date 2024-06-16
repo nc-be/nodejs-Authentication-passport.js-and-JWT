@@ -16,6 +16,16 @@ const price = Joi.number() // EL precio (precio) ES TIPO number
 .integer() // SU VALOR ES entero normal
 .min(10) // TIENE UN valor >= 10 (10 dolares)
 
+  // price min
+  const priceMin = Joi.number() // EL precio (precio) ES TIPO number
+  .integer() // SU VALOR ES entero normal
+  .min(10) // TIENE UN valor >= 10 (10 dolares)  // price min
+
+  // price MAX
+  const priceMax = Joi.number() // EL precio (precio) ES TIPO number
+  .integer() // SU VALOR ES entero normal
+  .min(10) // TIENE UN valor >= 10 (10 dolares)
+
 //description
 const description = Joi.string() // LA imagen (image) ES TIPO string
 .min(10) // TIENE UN MINIMO DE 3 caracteres
@@ -64,8 +74,25 @@ const getProductSchema = Joi.object({
 
 // ESQUEMA PARA LA PAGINACION - PIDE AL USUARIO INGRESAR LOS VALORES DE limit Y offset (AL MENOS UNO)
 const queryProductSchema = Joi.object({
-  limit: limit,
-  offset: offset
+  limit,
+  offset,
+  price,
+  priceMin,
+  // PRECIO MAXIMO TIENE UN CONDICIONAL: SIEMPRE SE DEBE ENVIAR ESTE VALOR SI SE ENVIO UN PRECIO MINIMO
+  /* SINTAXIS:
+  Atributo: Nombre_Atributo.when('Nombre_Atributo2, {condition,response}')
+
+  Nombre_Atributo: Atributo influenciado condicional
+  when: Condicional sequelize
+  Nombre_Atributo2: Atributo que debe existir segun el condicional
+  condition: Tipo de dato/valor/etc que debe tener el atributo
+  response: Esto debe hacer el Nombre_Atributo si se cumple condition
+  */
+  priceMax: priceMax.when('priceMin',{
+    is: Joi.number().integer().min(10).required(),  // PROPIEDADES DEL PRECIO MINIMO (SI EL PRECIO MINIMO EXISTE Y ES UN NUMERO ENTERO DE CON UN VALOR MINIMO DE 10)
+    then: Joi.required()
+    }
+    )
 });
 
 module.exports = { createProductSchema, updateProductSchema, getProductSchema, queryProductSchema };  // EXPORTAR TODOS LOS ESQUEMAS
