@@ -24,7 +24,7 @@ app.get('/products', (req,res) => {}    router.get('/', (req,res) => {}
 
 router.get('/',
   validatorHandler(queryProductSchema,'query'), // VALIDAR SI EXISTEN PARAMETROS EN EL ESQUEMA DE PAGINACION (limit, offset)
-  async (req,res) => {
+  async (req,res,next) => {
     try {
       const queryParams = req.query;
       const products = await service.find(queryParams);

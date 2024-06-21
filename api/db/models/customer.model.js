@@ -6,6 +6,7 @@ const { USER_TABLE } = require('./user.model'); // LLAMAR LA TABLA DEL MODELO DE
 
 const CUSTOMER_TABLE = 'customers'; // DEFINIR EL NOMBRE DE LA TABLA
 
+// DEFINIR EL ESQUEMA, SE ENCARGAN DE DEFINIR LA ESTRUCTURA DE LA BASE DE DATOS
 const CustomerSchema = {
   // DEFINIR ATRIBUTOS DEL ESQUEMA (id, name, lastName, phone, createAt, userId)
   id: {

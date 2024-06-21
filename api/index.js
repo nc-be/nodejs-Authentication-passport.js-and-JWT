@@ -15,7 +15,7 @@ app.use(express.json());  // SE UTILIZA PARA REVISION INFORMACION DE TIPO JSON R
 //app.use(cors());  // SE DA ACCESO A CUALQUIER DOMINIO (POR DEFECTO SOLO ACEPTA SU MISMO ORIGEN http://localhost:3001) - NORMALMENTE SE DA ACCESO
 
 // ACCESO LIMITADO - DOMINIOS ESPECIFICOS
-const lista = ['http://localhost:8080', 'https://myapp.co']; // LISTA DE DOMINIOS
+const lista = ['http://localhost:8000', 'https://myapp.co']; // LISTA DE DOMINIOS
 const options = {
   // CONDICIONAL: ORIGEN ACEPTADO O NO
   origin:(origin, callback) => {

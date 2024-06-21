@@ -24,6 +24,7 @@ class CustomerService {
 
   async find() {
     const rta = await models.Customer.findAll({include:['user']});
+    //
     // Dentro del servicio se agrega la expresion {include:['user']}
     /*
     'user' HACE REFERENCIA A LA ASOCIACION BelongsTo ENTRE EL MODELO 'customer.model.js' Y EL MODELO 'user.model.js' Donde 'user' ES EL ALIAS QUE SE LE DA A LA RELACION

@@ -1,6 +1,7 @@
 // MODELO EN LOS QUE SE DEFINEN LOS ESQUEMAS DE LA BASE DE DATOS (USERS)
 
 const { Model, DataTypes, Sequelize } = require('sequelize'); // LLAMAR UTILIDADES Model, DataTypes y Sequelize del paquete sequelize
+
 const { withSqliteForeignKeysOff } = require('sequelize/lib/dialects/sqlite/sqlite-utils');
 
 const USER_TABLE = 'users'; // DEFINIR EL NOMBRE DE LA TABLA

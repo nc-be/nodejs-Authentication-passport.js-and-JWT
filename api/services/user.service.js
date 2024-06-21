@@ -43,6 +43,7 @@ class UserService {
     return rta.rows; // RETORNA LA LISTA DE PRODUCTOS
     */
 
+
     // servicio 'find' con sequelize
     /*
     SINTAXIS
