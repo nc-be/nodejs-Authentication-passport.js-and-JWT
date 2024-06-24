@@ -8,6 +8,8 @@ const port = process.env.PORT || 3001;    // DEFINIR PUERTO DEL SERVIDOR
 
 const { midError,clientError,boomError, ormErrorHandler } = require('./middlewares/error.handler'); // LLAMAR LA CARPETA MIDDLEWARES, midError SE ENCARGA DE ERRORES GLOBALES, clientError SE ENCARGA DE COMUNICAR ERRRORES CON EL USUARIO, boomError SE ENCARGA DE ERRORES CON UN MANEJO CORRECTO DEL RESPONSIVE STATUS
 
+const { checkApiKey } = require('./middlewares/auth.handler'); // LLAMAR MIDDLEWARE DE VERIFICACION CAPA DE AUTENTICACION
+
 app.use(express.json());  // SE UTILIZA PARA REVISION INFORMACION DE TIPO JSON RECIBIDA POR POST  - INSOMNIAS
 
 /* CORS - TODAS LAS CONFIGURACIONES */
@@ -44,15 +46,19 @@ app.get('/api', (req,res) =>{
   res.send('Prueba servidor express');
 });
 
-
+// Prueba del middleware de verificacion de la capa de autenticacion
+// antes de entrar en la funcion ejecuta el middleware usando 'checkApiKey'
+app.get('/auth_middlware_test', checkApiKey, (req,res) =>{
+  res.send('Acceso autorizado');
+});
 
 /* EJECUTAR MIDDLEWARES DE ERROR
 NOTA: SE EJECUTAN EN EL ORDEN EN QUE SE PONGAN - COMPORTAMIENTO SECUENCIAL
 */
-app.use(midError);
-app.use(ormErrorHandler);
-app.use(boomError);
-app.use(clientError);
+app.use(midError);  // DETECTA ERRORES GLOBALES
+app.use(ormErrorHandler); // ESTE MIDDLEWARE SE ENCARGA DE LOS REQUISITOS DE LOS ESQUEMAS UTILIZADOS POR ORM
+app.use(boomError); // IDENTIFICA SI EL ERROR ES TIPO BOOM
+app.use(clientError); // DETECTA ERRORES Y CREA UN FORMATO QUE PUEDE VER EL CLIENTE
 
 // ESCUCHAR PUERTO DEL SERVIDOR ('port')
 app.listen(port, () => {

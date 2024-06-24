@@ -36,11 +36,6 @@ router.get('/',
 );// TEST:  localhost:'port'/products?size=X     X REPRESENTA LA CANTIDAD DE PRODUCTOS QUE SE GENERARAN
 // EJ:  localhost:3001/products?size=15
 
-// EJEMPLO DE RUTA FUNCIONAL  - YA QUE ES UN ENDPOINT ESPECIFICO (filter) SE DEBE PONER ANTES DE LOS ENDPOINTS DE FORMA DINAMICA (:id)
-router.get('/filter1', (req,res) => {
-  res.send('Ejemplo de filtro funcional');
-});//  EJ: localhost:3001/products/filter1
-
 // DEVULVE UN ID OBTENIDO DEL URL
 /* VARIABLE next AÑADIDA PARA CAPTURA ERROR Y HACER QUE FUNCIONE EL MIDDLEWARE */
 /* 20: validator.handler() AÑADIDO PARA LLEVAR A CABO UNA VALIDACION DE DATOS PREVIAMENTE
@@ -51,12 +46,12 @@ getProductSchema = ESQUEMA QUE SE VA A VALIDAR (get)
 
 SI EL PRODUCTO BUSCADO NO CUMPLE CON EL VALOR uuid ESTANDAR SE ACTIVARA EL validator.handler
 */
-router.get('/:id', validatorHandler(getProductSchema,'params'), async (req,res,next) => {
+router.get('/:id',
+  validatorHandler(getProductSchema,'params'),
+  async (req,res,next) => {
   // FORMA EXPLICITA DE CAPTURAR EL ERROR MEDIANTE EL USO DE try/catch
   try {
     // FUNCIONAMIENTO NORMAL DEL ROUTING
-
-    const primerID = req.params.id;  // DEFINIR EL PARAMETRO 'id' DEL OBJETO COMO LA VARIABLE 'primerID'
     const {id} = req.params; // OTRA FORMA DE DEFINIR UNA VARIABLE SI DENTRO DE LOS PARAMETROS SOLO NOS INTERESA UNO (id) - ECMASCRIPT 6
 
     /* TOMA EL PARAMETRO 'id' ENVIADO POR EL USUARIO (EJ: localhost:3001/products/123   id=123) Y LO ENVIA A LA FUNCION findOne DEL ARCHIVO ./SERVICES/product.service
@@ -124,10 +119,13 @@ router.post('/', validatorHandler(createProductSchema,'body'), async (req,res) =
 1. VALIDA EL 'id' OBTENIDO DESDE 'params'
 2. VALIDA EL RESTO DE COMPONENTES DEL PRODUCTO(name, price, image...) OBTENIDOS DESDE 'body'
 */
-router.patch('/:id', validatorHandler(getProductSchema,'params'), validatorHandler(updateProductSchema,'body'), async (req,res,next) => {
+router.patch('/:id',
+  validatorHandler(getProductSchema,'params'),
+  validatorHandler(updateProductSchema,'body'),
+  async (req,res,next) => {
   // try/catch AÑADIDO PARA COMROBAR SI EL ID ENVIADO POR EL USUARIO EXISTE O NO (NORMALMENTE SE HACIA DIRECTAMENTE EN EL ARCHIVO DE SERVICIO CON UN CONDICIONAL)
   try {
-    const {id} = req.params; //  RECIBE PARAMETRO 'id'
+  const {id} = req.params; //  RECIBE PARAMETRO 'id'
   const body = req.body;  //  RECIBIR PARAMETROS PROVENIENTES DE INSOMNIA CON EL ATRIBUTO 'body'
 
   /*  CONFIGURACION DE PRODUCTO MODIFICADA - ESTA CONFIGURACION SE DISEÑO ANTES DE TENER EL SERVICIO 'update' POR LO CUAL YA NO SE USA
@@ -155,7 +153,8 @@ router.patch('/:id', validatorHandler(getProductSchema,'params'), validatorHandl
   }
 });
 
-router.delete('/:id', async (req,res,next) => {
+router.delete('/:id',
+  async (req,res,next) => {
   try {
     const {id} = req.params; //   RECIBE PARAMETRO 'id'
   /*  CONFIGURACION DE PRODUCTO ELIMINADO - ESTA CONFIGURACION SE DISEÑO ANTES DE TENER EL SERVICIO 'deleted' POR LO CUAL YA NO SE USA

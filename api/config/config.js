@@ -17,6 +17,9 @@ const config = {
   dbHost: process.env.DB_HOST,
   dbPort: process.env.DB_PORT,
   dbName: process.env.DB_NAME,
+
+  // Llave middleware de autenticacion
+  API_KEY: process.env.API_KEY
 }
 
 module.exports = { config };  // EXPORTAR ARCHIVO PARA LA CONFIGURACION
