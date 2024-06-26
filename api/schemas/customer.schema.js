@@ -25,14 +25,14 @@ const createCustomerSchema = Joi.object({
 
   // PARAMETROS LIGADOS AL USUARIO
   // userId - OPTION 1 - En esta opcion se requiere el userId
-  userId:userId.required()
+  // userId:userId.required()
 
-  // Datos de usuario directos  - OPTION 2  - En esta opcion se requiere el email y password en forma de objeto "user":{}
-  /* user:Joi.object({
+  // Datos de usuario directos  - OPTION 2  - En esta opcion se requiere enviar el email y password en forma de objeto "user":{}
+  user:Joi.object({
     email:email.required(),
     password:password.required()
     }
-  ) */
+  )
   }
 );
 
