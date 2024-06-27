@@ -63,6 +63,14 @@ class UserService {
     return user;
   }
 
+  // Este servicio retorna el email del usuario
+  async findByEmail(email){
+    const userByEmail = await models.User.findOne({
+      where: { email } // Busca el PRIMER email que coincida en la base de datos (este atributo es unico)
+    });
+    return userByEmail;
+  }
+
   async update(id, changes) {
     // const user = await models.User.findByPk(); // 'findByPk' buscara el usuario que coincida con el 'id' obtenido
     const user = await this.findOne(id); // Mejora de la linea de codigo anterior - lleva a cabo el comando 'findByPk' y aplica el condicional que detecta si existe o no un usuario que coincida con el 'id' - envia error 'User not found' en caso contrario

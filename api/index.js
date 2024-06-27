@@ -31,8 +31,11 @@ const options = {
   }
 };
 
-routerApi(app);
+require('./utils/auth/'); // HABILITAR ESTRATEGIAS DE AUTENTICACION - PASSPORTJS
+
 app.use(cors(options));
+
+routerApi(app);
 
 
 /* DEFINIR RUTA DE LA APLICACION
