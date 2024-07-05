@@ -3,6 +3,8 @@ const boom = require('@hapi/boom');
 
 const { models } = require('./../libs/sequelize');
 
+const passport = require('passport'); // Importar el module passport
+
 class CategoryService {
 
   constructor(){}
