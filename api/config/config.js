@@ -19,7 +19,10 @@ const config = {
   dbName: process.env.DB_NAME,
 
   // Llave middleware de autenticacion
-  API_KEY: process.env.API_KEY
+  API_KEY: process.env.API_KEY,
+
+  // Palabra clave para generar tokens JWT
+  JWTSecret: process.env.JWT_SECRET
 }
 
 module.exports = { config };  // EXPORTAR ARCHIVO PARA LA CONFIGURACION

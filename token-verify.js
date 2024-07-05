@@ -17,4 +17,3 @@ const verifyToken = signToken(token,secret);
 console.log(verifyToken);
 const verifyToken2 = signToken(token2,secret);  // token incorrecto
 console.log(verifyToken);
-
