@@ -24,12 +24,15 @@ const CategoryService = require('./../services/category.service');
 const validatorHandler = require('./../middlewares/validator.handler');
 const { createCategorySchema, updateCategorySchema, getCategorySchema } = require('./../schemas/category.schema');
 
-const { checkAdminRole } = require('./../middlewares/auth.handler'); // Importar el middleware de autenticacion para comprobar el role del usuario
+const { checkRoles } = require('./../middlewares/auth.handler'); // Importar el middleware de autenticacion (MEJORADO) para comprobar el role del usuario
 
 const router = express.Router();
 const service = new CategoryService();
 
-router.get('/', async (req, res, next) => {
+router.get('/',
+  passport.authenticate('jwt',{ session:false }),
+  checkRoles('admin', 'seller', 'customer'),
+  async (req, res, next) => {
   try {
     const categories = await service.find();
     res.json(categories);
@@ -39,6 +42,8 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id',
+  passport.authenticate('jwt',{ session:false }),
+  checkRoles('admin', 'seller', 'customer'),
   validatorHandler(getCategorySchema, 'params'),
   async (req, res, next) => {
     try {
@@ -53,7 +58,7 @@ router.get('/:id',
 
 router.post('/',
   passport.authenticate('jwt',{ session:false }),
-  checkAdminRole, // Verifica el value del role del usuario, en caso de que este sea igual a 'admin' es posible proceder al servicio 'post' ya que es un permiso reservado solo para administradores
+  checkRoles('admin'), // Verifica que el role del usuario sea 'admin' o 'customer', en caso contrario no se permite el acceso al endpoint 'post'
   validatorHandler(createCategorySchema, 'body'),
   async (req, res, next) => {
     try {
@@ -67,6 +72,8 @@ router.post('/',
 );
 
 router.patch('/:id',
+  passport.authenticate('jwt',{ session:false }),
+  checkRoles('admin', 'seller'),
   validatorHandler(getCategorySchema, 'params'),
   validatorHandler(updateCategorySchema, 'body'),
   async (req, res, next) => {
@@ -82,6 +89,8 @@ router.patch('/:id',
 );
 
 router.delete('/:id',
+  passport.authenticate('jwt',{ session:false }),
+  checkRoles('admin', 'seller'),
   validatorHandler(getCategorySchema, 'params'),
   async (req, res, next) => {
     try {

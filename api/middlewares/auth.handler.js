@@ -40,5 +40,21 @@ function checkAdminRole(req,res,next){
   }
 }
 
-module.exports = { checkApiKey, checkAdminRole };
+// (ESTA FUNCION ES UNA MEJORA DE checkAdminRole)
+// Esta funcion se encarga de asignar los roles que pueden ingresar a cada endpoint, para ello se tienen los roles como parametros de entrada y se retorna un middleware
+function checkRoles(...roles){ // Array de roles: entrada (los ... transforman los datos de entrada en un array de argumentos)
+  return (req,res,next) => { // middleware: salida
+    const user = req.user;
+    console.log(roles);
+    console.log(user);
+    // Este condicional verifica si dentro de un array de roles ESPECIFICO esta incluido el array del usuario actual
+    if (roles.includes(user.role)) {
+      next(); // true: acceso permitido
+    } else {
+      next(boom.unauthorized()); // false: acceso denegado
+    }
+  }
+}
+
+module.exports = { checkApiKey, checkAdminRole, checkRoles };
 
