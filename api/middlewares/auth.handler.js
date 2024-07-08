@@ -29,5 +29,16 @@ function checkApiKey(req,res,next){
   }
 }
 
-module.exports = { checkApiKey };
+// Esta funcion se encarga de verificar que el value de la variable user.role sea 'admin'
+function checkAdminRole(req,res,next){
+  const user = req.user;
+  // console.log(user); // IMPRIMIR PAYLOAD EN CONSOLA
+  if (user.role === 'admin'){
+    next();
+  }else{
+    next(boom.unauthorized());
+  }
+}
+
+module.exports = { checkApiKey, checkAdminRole };
 

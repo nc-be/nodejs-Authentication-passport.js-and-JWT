@@ -24,6 +24,8 @@ const CategoryService = require('./../services/category.service');
 const validatorHandler = require('./../middlewares/validator.handler');
 const { createCategorySchema, updateCategorySchema, getCategorySchema } = require('./../schemas/category.schema');
 
+const { checkAdminRole } = require('./../middlewares/auth.handler'); // Importar el middleware de autenticacion para comprobar el role del usuario
+
 const router = express.Router();
 const service = new CategoryService();
 
@@ -51,6 +53,7 @@ router.get('/:id',
 
 router.post('/',
   passport.authenticate('jwt',{ session:false }),
+  checkAdminRole, // Verifica el value del role del usuario, en caso de que este sea igual a 'admin' es posible proceder al servicio 'post' ya que es un permiso reservado solo para administradores
   validatorHandler(createCategorySchema, 'body'),
   async (req, res, next) => {
     try {
