@@ -1,13 +1,13 @@
-const express=require('express');
-const CustomerService=require('../services/order.service');
-const validatorHandler=require('../middlewares/validator.handler');
+const express = require('express');
+const OrderService = require('../services/order.service');
+const validatorHandler = require('../middlewares/validator.handler');
 
 const{ createOrderSchema, getOrderSchema, updateOrderSchema, addItemSchema} =
   require('../schemas/order.schema');
 
 const router=express.Router();
 
-const service = new CustomerService();
+const service = new OrderService();
 
 router.get('/',
 async(req,res,next)=>{

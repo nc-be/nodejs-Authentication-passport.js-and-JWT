@@ -6,6 +6,7 @@ const customersRouter = require('./customers.router');  // IMPORTAR RUTA DE USUA
 const categoriesRouter = require('./categories.router');  // IMPORTAR RUTA DE CATEGORIAS
 const ordersRouter = require('./orders.router');  // IMPORTAR RUTA ORDERS
 const authRouter = require('./auth.router');  // IMPORTAR RUTA AUTH
+const profileRouter = require('./profile.router');  // IMPORTAR RUTA PROFILE
 
 // ESTA FUNCION SE ENCARGA DE LA CONFIGURACION GENERAL DE TOAS LAS RUTAS
 function routerApi(app){
@@ -18,6 +19,7 @@ function routerApi(app){
   router.use('/categories', categoriesRouter); // CATEGORIAS
   router.use('/orders', ordersRouter); // ORDERS
   router.use('/auth', authRouter); // AUTHENTICATION
+  router.use('/profile', profileRouter); // REQUEST CUSTOMER ORDERS
 };
 // localhost:3001/api/v1/r2
 

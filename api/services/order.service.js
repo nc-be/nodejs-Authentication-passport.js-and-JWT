@@ -18,6 +18,25 @@ class OrderService {
     return newItem;
   }
 
+  // Este servicio se encarga de retornar las ordenes del cliente de forma anidada (es decir, tomando en cuenta sus asociaciones)
+  async findByUser(userId){ // Como dato de entrada se tiene el 'id' del usuario, los usuarios tienen una relacion 1on1 con los clientes
+    const orders = await models.Order.findAll({
+      // sequelize usa el atributo 'userId' para obtener las ordenes de compra del cliente
+      where:{
+        // where se utiliza para hacer consultas con asociaciones (relacion user-customer 1on1)
+        // ORDER tiene un CUSTOMER asociado, CUSTOMER tiene un USER asociado
+        '$customer.user.id$' : userId
+      },
+      include:[
+        {
+          association: 'customer',
+          include: 'user'
+        },'items'
+      ]
+    });
+    return orders;
+  }
+
   async find() {
     const rta = await models.Order.findAll();
     return [ rta ];
