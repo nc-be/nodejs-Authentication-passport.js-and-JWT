@@ -8,8 +8,24 @@ class OrderService {
   constructor(){
   }
 
-  async create(data) {
+  // ANTES DE JWT
+  /* async create(data) {
     const newOrder= await models.Order.create(data);
+    return newOrder;
+  } */
+
+  // DESPUES DE JWT
+  async create(data) {
+    const customer = await models.Customer.findOne({
+      where: {
+        '$user.id$': data.userId
+      },
+      include: ['user']
+    })
+    if (!customer) {
+      throw boom.badRequest('Customer not found');
+    }
+    const newOrder = await models.Order.create({ customerId: customer.id });
     return newOrder;
   }
 

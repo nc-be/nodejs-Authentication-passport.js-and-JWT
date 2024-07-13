@@ -19,7 +19,7 @@ router.get('/my-orders',
 
       /* El id del usuario se obtiene a partir de su payload. EL PAYLOAD CONTIENE = sub:user.id y role:user.role
 
-      Recordar que se enviar el userId y no el customerId, por medio de la sequelize se identifican el cliente utilizando la asociacion 1on1 creada entre user-customer
+      Recordar que se enviar el userId y no el customerId, por medio de sequelize se identifican el cliente utilizando la asociacion 1on1 creada entre user-customer
 
       Recordar tambien que este metodo no PIDE AL USER ingresar su userId nuevamente, se utilizan los datos de su sesion */
       res.json(orders);
