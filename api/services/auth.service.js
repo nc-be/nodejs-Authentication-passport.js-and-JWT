@@ -72,7 +72,7 @@ class AuthService {
         to: `${foundUser.email}`, // Email que recibe el mensaje (debe encontrarse dentro de la base de datos)
         subject: "Hello ✔", // Subject line
         text: "Hello world?", // plain text body
-        html: "<b>NodeJS test - passport 15c</b>", // html body
+        html: "<b>NodeJS test - 16c auth service</b>", // html body
       });
 
       return { message: 'Mensaje enviado... ID: ' + info.messageId};
