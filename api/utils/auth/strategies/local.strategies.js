@@ -4,13 +4,12 @@
  */
 const { Strategy } = require('passport-local'); // Importar el module passport-local
 
-const boom = require('@hapi/boom'); // Importar el module boom para mensajes de error
+// const UserService = require('../../../services/user.service'); // Importar servicios de usuarios
+// const service = new UserService(); // Generar instacia para los servicios de usuarios (SE UTILIZABA ANTES DE auth.service.js)
 
-const bcrypt = require('bcrypt'); // Importar el module bcrypt para verificar que el hashing coincida
+const AuthService = require('../../../services/auth.service'); // Importar servicios de usuarios
 
-const UserService = require('../../../services/user.service'); // Importar servicios de usuarios
-
-const service = new UserService(); // Generar instacia para los servicios de usuarios
+const service = new AuthService(); // Generar instacia para los servicios de usuarios
 
  // Crear instancia de la estrategia
  /* parametros de entrada: email, password, done (verifica que el login funcione correctamente) */
@@ -20,6 +19,9 @@ const localStrategy = new Strategy(
     passwordField:'password'
   },
   async(email, password, done)=>{
+
+  // ESTRATEGIA PASSPORT.LOCAL (ANTES DE IMPLEMENTAR SERVICIO 'getUser' auth.service.js)
+  /*
   // intenta llevar a cabo el servicio si no funciona, 'done' enviara un mensaje de error (1)
   try {
     const foundUser = await service.findByEmail(email); // Busca el PRIMER usuario que corresponda a este email (este atributo es unico)
@@ -41,7 +43,16 @@ const localStrategy = new Strategy(
   } catch (error) {
     done(error, false); // Enviar error (done error) (1)
   }
+  */
 
+  // ESTRATEGIA PASSPORT.LOCAL (DESPUES DE IMPLEMENTAR SERVICIO 'getUser' auth.service.js)
+  try {
+    // Lleva a cabo la autenticacion utilizando la funcion asincrona 'getUser' del servicio auth.service.js
+    const user = await service.getUser(email,password);
+    done(null,user);
+  } catch (error) {
+    done(error, false); // Enviar error (done error) (1)
+  }
 });
 
 module.exports = localStrategy; // Exportar estrategia

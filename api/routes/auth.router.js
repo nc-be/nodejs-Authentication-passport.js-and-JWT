@@ -1,27 +1,19 @@
 // RUTA DE AUTENTICACION - passportjs
 const express = require('express');
 const passport = require('passport'); // Importar el module passport
-const jwt = require('jsonwebtoken'); // Importar modulo jsonwebtoken
-
-const { config } = require('./../config/config')
 
 const router = express.Router();
+
+const AuthService = require('./../services/auth.service'); // Importar servicios de usuarios
+const service = new AuthService(); // Generar instacia para los servicios de usuarios
 
 router.post('/login',
   // Llevar a cabo validacion por medio de la estrategia passport-local (DESHABLITAR SESIONES JWT)
   passport.authenticate('local',{ session:false }),
   async (req, res, next) =>
   {
-    // ANTES DE JWT (Firmar y verificar tokens)
-    /* try {
-      // Envia el usuario si la validacion de la estrategia funciona
-      res.json(req.user);
-    } catch (error) {
-      // Error si la validacion no funciona
-      next(error);
-    } */
-
-    // DESPUES DE JWT (Firmar y verificar tokens)
+    // jsonwebtoken (ANTES DE IMPLEMENTAR SERVICIO'signToken' auth.service.js)
+    /*
     try {
       const user = req.user;  // Datos del usuario
       const payload = { // Datos del payload importados del usuario (id, role)
@@ -34,13 +26,32 @@ router.post('/login',
         user,
         token
       })
+    } catch (error) {
+      next(error);
+    }
+    */
 
+    // jsonwebtoken (ANTES DE IMPLEMENTAR SERVICIO'signToken' auth.service.js)
+    try {
+      const user = req.user;
+      res.json(service.signToken(user));
     } catch (error) {
       next(error);
     }
   }
+);
 
-
+router.post('/recovery',
+  async (req, res, next) =>
+  {
+    try {
+      const { email } = req.body;
+      const rta = service.sendEmail(email);
+      res.json(rta);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 module.exports = router;

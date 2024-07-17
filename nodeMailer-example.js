@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-// Creacion del transporter (Es posible definir datos de user y pass)
+// Creacion del transporter (LOS DATOS DE USER Y PASS SON EXTRAIDOS DE https://ethereal.email/create)
 const transporter = nodemailer.createTransport({
   host: "smtp.ethereal.email",
   port: 587,
