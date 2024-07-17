@@ -25,6 +25,7 @@ function checkApiKey(req,res,next){
     next();
   }
   else{
+    //next(boom.unauthorized('apiKey: ' + apiKey + ' invalida'));
     next(boom.unauthorized());
   }
 }
@@ -36,6 +37,7 @@ function checkAdminRole(req,res,next){
   if (user.role === 'admin'){
     next();
   }else{
+    //next(boom.unauthorized('Solo' + user.role + 's permitidos'));
     next(boom.unauthorized());
   }
 }
@@ -51,7 +53,8 @@ function checkRoles(...roles){ // Array de roles: entrada (los ... transforman l
     if (roles.includes(user.role)) {
       next(); // true: acceso permitido
     } else {
-      next(boom.unauthorized()); // false: acceso denegado
+      //next(boom.unauthorized(user.role + ' is an invalid role'));
+      next(boom.unauthorized());// false: acceso denegado
     }
   }
 }

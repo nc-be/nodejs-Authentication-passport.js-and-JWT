@@ -49,8 +49,10 @@ const localStrategy = new Strategy(
   try {
     // Lleva a cabo la autenticacion utilizando la funcion asincrona 'getUser' del servicio auth.service.js
     const user = await service.getUser(email,password);
+    console.log('-------------test5');
     done(null,user);
   } catch (error) {
+    console.log('-------------test6');
     done(error, false); // Enviar error (done error) (1)
   }
 });

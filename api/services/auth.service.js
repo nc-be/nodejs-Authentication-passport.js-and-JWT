@@ -29,11 +29,13 @@ class AuthService {
         return foundUser;
       } else {
         // (3) En caso de que no coincida
-        throw boom.unauthorized(); // Note - acceso denegado
+        throw boom.unauthorized('Password: ' + password + ' no coincide con la base de datos');
+        // throw boom.unauthorized(); // Note - acceso denegado
       }
     } else {
       // (2) En caso de que no exista el email dentro de la base de datos
-      throw boom.notFound(); // Note - acceso denegado
+      throw boom.notFound('El usuario: ' + email + ' no existe');
+      // throw boom.notFound(); // Note - acceso denegado
     }
   }
 
@@ -55,28 +57,29 @@ class AuthService {
   async sendEmail(email){
     const foundUser = await service.findByEmail(email); // Busca el PRIMER usuario que corresponda a este email (este atributo es unico)
     if (foundUser) {
+      // Creacion del transporter (Los datos de usuario y password son extraidos de las variables de entorno)
       const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 465,
         secure: true, // Use `true` for port 465, `false` for all other ports
         auth: {
-          user: "nc.betest@gmail.com",
-          pass: "gloagymcfsasmfnt",
+          user: "nc.betest@gmail.com",  // user - gmail
+          pass: "gloagymcfsasmfnt", // pass - app.password configurado en gmail (clase 15)
         },
       });
-      await transporter.sendMail({
+      const info = await transporter.sendMail({
         from: '"nc-be" <>', // alias e Email que envia mensaje (sera igual al del transporter)
-        to: `${user.email}`, // Email que recibe el mensaje (debe encontrarse dentro de la base de datos)
+        to: `${foundUser.email}`, // Email que recibe el mensaje (debe encontrarse dentro de la base de datos)
         subject: "Hello ✔", // Subject line
         text: "Hello world?", // plain text body
         html: "<b>NodeJS test - passport 15c</b>", // html body
       });
 
-    // return { message: 'Mensaje enviado' };
-    return console.log('\nMensaje enviado');
-    }
-    else{
-      throw boom.unauthorized(); // Peticion denegada (usuario no existe)
+      return { message: 'Mensaje enviado... ID: ' + info.messageId};
+    // return console.log('\nMensaje enviado');
+    } else{
+      throw boom.notFound('El usuario: ' + email + ' no existe'); // Peticion denegada (usuario no existe)
+      //throw boom.unauthorized(); // Peticion denegada (usuario no existe)
     }
   }
 }

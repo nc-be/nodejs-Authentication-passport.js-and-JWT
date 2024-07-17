@@ -4,7 +4,7 @@ const passport = require('passport'); // Importar el module passport
 
 const router = express.Router();
 
-const AuthService = require('./../services/auth.service'); // Importar servicios de usuarios
+const AuthService = require('../services/auth.service'); // Importar servicios de usuarios
 const service = new AuthService(); // Generar instacia para los servicios de usuarios
 
 router.post('/login',
@@ -34,7 +34,8 @@ router.post('/login',
     // jsonwebtoken (ANTES DE IMPLEMENTAR SERVICIO'signToken' auth.service.js)
     try {
       const user = req.user;
-      res.json(service.signToken(user));
+      const tokenData = await service.signToken(user);
+      res.json(tokenData);
     } catch (error) {
       next(error);
     }
@@ -46,7 +47,7 @@ router.post('/recovery',
   {
     try {
       const { email } = req.body;
-      const rta = service.sendEmail(email);
+      const rta = await service.sendEmail(email);
       res.json(rta);
     } catch (error) {
       next(error);
