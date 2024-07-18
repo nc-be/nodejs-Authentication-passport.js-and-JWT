@@ -22,7 +22,11 @@ const config = {
   API_KEY: process.env.API_KEY,
 
   // Palabra clave para generar tokens JWT
-  JWTSecret: process.env.JWT_SECRET
+  JWTSecret: process.env.JWT_SECRET,
+
+  // Datos de autenticacion - transporter nodeMailer
+  userTransporter: process.env.USER_TRANSPORTER,
+  passTransporter: process.env.PASS_TRANSPORTER
 }
 
 module.exports = { config };  // EXPORTAR ARCHIVO PARA LA CONFIGURACION

@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt'); // Importar el module bcrypt para verificar qu
 
 const jwt = require('jsonwebtoken'); // Importar modulo jsonwebtoken para firmar y validar tokens (servicio signToken)
 
-const { config } = require('./../config/config') // (servicio signToken)
+const { config } = require('./../config/config') // (servicio signToken - sendEmail)
 
 const nodemailer = require("nodemailer"); // Importar libreria para el envio de correos (servicio sendMail)
 
@@ -63,8 +63,8 @@ class AuthService {
         port: 465,
         secure: true, // Use `true` for port 465, `false` for all other ports
         auth: {
-          user: "nc.betest@gmail.com",  // user - gmail
-          pass: "gloagymcfsasmfnt", // pass - app.password configurado en gmail (clase 15)
+          user: config.userTransporter,  // user - gmail
+          pass: config.passTransporter, // pass - app.password configurado en gmail (clase 15)
         },
       });
       const info = await transporter.sendMail({
