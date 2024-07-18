@@ -24,6 +24,11 @@ const UserSchema = {
     allowNull: false,           // No permite valor nulo
     type: DataTypes.STRING      // Tipo de dato (STRING)
   },
+  recoveryToken:{
+    field: 'recovery_token',
+    allowNull: true,            // Permite valor nulo (solo es necesario si se desea recuperar el password)
+    type: DataTypes.STRING      // Tipo de dato (STRING)
+  },
   createAt:{
     allowNull: false,           // No permite valor nulo
     type: DataTypes.DATE,       // Tipo de dato (DATE)

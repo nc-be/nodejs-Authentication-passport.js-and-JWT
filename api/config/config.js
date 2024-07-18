@@ -26,7 +26,10 @@ const config = {
 
   // Datos de autenticacion - transporter nodeMailer
   userTransporter: process.env.USER_TRANSPORTER,
-  passTransporter: process.env.PASS_TRANSPORTER
+  passTransporter: process.env.PASS_TRANSPORTER,
+
+  // Palabra clave para generar tokens - recovery link
+  recoverySecret: process.env.RECOVERY_SECRET,
 }
 
 module.exports = { config };  // EXPORTAR ARCHIVO PARA LA CONFIGURACION
