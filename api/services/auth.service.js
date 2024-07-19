@@ -56,22 +56,32 @@ class AuthService {
   // Genera un link para recuperar el pass del correo
   async sendRecoveryLink(email){
     const foundUser = await service.findByEmail(email);
+    console.log(foundUser);
     if (foundUser) {
-      // GENERAR LINK: Para crear el link se utilizara un token para identificar al usuario - La creacion de este token sigue la misma logica del token jwt (Clase 10)
-      const payload= {sub: user.id}; // Payload generado apartir del id del usuario
-      const token = jwt.sign(payload,config.recoverySecret, {expiresIn: '15min'}); // Token TEMPORAL (15 minutos luego de enviar el correo) generado apartir del del payload y palabra secreta (variable de entorno RECOVERY_SECRET - configurada como recoverySecret)
+      // GENERAR LINK
+      const payload= {sub: foundUser.id}; // Payload generado apartir del id del usuario
+      const token = jwt.sign(payload,config.recoverySecret, {expiresIn: '15min'}); /* Token TEMPORAL (15 minutos luego de enviar el correo) generado apartir del del payload y palabra secreta (variable de entorno RECOVERY_SECRET - configurada como recoverySecret) */
       const link = `http://frontendurl.com/recovery?token=${token}`; // Link generado a partir del token
 
+      // Guardar token en la tabla de usuarios  - campo: 'recovery_token' - atributo recoveryToken
+      await service.update(foundUser.id, {recoveryToken: token});
+      /* sintaxis
+      await service.update(Identificador, {atributoTabla: valueAtributo});
+      Identificador: Este atributo se utilizara para identificar donde iran los cambios (id del usuario)
+      atributoTabla: Este atributo sera donde iran implementados los cambios (campo recoveryToken)
+      valueAtributo: Valor que se le dara al atributoTabla (variabletoken)
+      */
+
       // Informacion del mensaje de correo a enviar
-      const infoMail = {
+      const infoRecoveryMail = {
         from: '"nc-be" <>', // alias e Email que envia mensaje (sera igual al del transporter)
-        to: `${foundUser.email}`, // Email que recibe el mensaje (debe encontrarse dentro de la base de datos)
+        to:`${foundUser.email}`, // Email que recibe el mensaje (debe encontrarse dentro de la base de datos)
         subject: "Email de recuperacion de password", // Subject line
         // text: "Hello world?", // plain text body - Disabled Clase 17
-        html: "<b>Ingresar al siguiente link: </b>", // html body
+        html: `<b>Ingresar al siguiente link para reestablecer la contrase\u00F1a: ${link} </b>`, // html body
       }
 
-      const rta = await this.sendEmail(infoMail); // Ejecuta el servicio 'sendEmail' para enviar un mensaje con la informacion contenida en 'infoMail'
+      const rta = await this.sendEmail(infoRecoveryMail); // Ejecuta el servicio 'sendEmail' para enviar un mensaje segun la configuracion del mensaje
       return rta;
     } else{
       throw boom.unauthorized();
@@ -80,27 +90,21 @@ class AuthService {
 
   // Envio de correos utilizando Gmail como SMTP (Aqui esta definido el transporter)
   async sendEmail(infoMail){
-    const foundUser = await service.findByEmail(email); // Busca el PRIMER usuario que corresponda a este email (este atributo es unico)
-    if (foundUser) {
-      // Creacion del transporter (Los datos de usuario y password son extraidos de las variables de entorno)
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true, // Use `true` for port 465, `false` for all other ports
-        auth: {
-          user: config.userTransporter,  // user - gmail
-          pass: config.passTransporter, // pass - app.password configurado en gmail (clase 15)
-        },
-      });
+  // Creacion del transporter (Los datos de usuario y password son extraidos de las variables de entorno)
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, // Use `true` for port 465, `false` for all other ports
+    auth: {
+      user: config.userTransporter,  // user - gmail
+      pass: config.passTransporter, // pass - app.password configurado en gmail (clase 15)
+    },
+  });
 
-      const info = await transporter.sendMail(infoMail);
+  const info = await transporter.sendMail(infoMail);
 
-      return { message: 'Mensaje enviado... ID: ' + info.messageId};
-    // return console.log('\nMensaje enviado');
-    } else{
-      throw boom.notFound('El usuario: ' + email + ' no existe'); // Peticion denegada (usuario no existe)
-      //throw boom.unauthorized(); // Peticion denegada (usuario no existe)
-    }
+  return { message: 'Mensaje enviado... ID: ' + info.messageId};
+  // return console.log('\nMensaje enviado');
   }
 }
 
