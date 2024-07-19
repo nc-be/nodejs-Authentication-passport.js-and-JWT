@@ -29,13 +29,13 @@ class AuthService {
         return foundUser;
       } else {
         // (3) En caso de que no coincida
-        throw boom.unauthorized('Password: ' + password + ' no coincide con la base de datos');
-        // throw boom.unauthorized(); // Note - acceso denegado
+        //throw boom.unauthorized('Password: ' + password + ' no coincide con la base de datos'); //(TESTING)
+        throw boom.unauthorized(); // Note - acceso denegado
       }
     } else {
       // (2) En caso de que no exista el email dentro de la base de datos
-      throw boom.notFound('El usuario: ' + email + ' no existe');
-      // throw boom.notFound(); // Note - acceso denegado
+      //throw boom.notFound('El usuario: ' + email + ' no existe'); // (TESTING)
+      throw boom.notFound(); // Note - acceso denegado
     }
   }
 
@@ -47,6 +47,9 @@ class AuthService {
       }
 
       const token = jwt.sign(payload, config.JWTSecret)  // Generar token apartir de el payload y la palabra secreta
+      if (user.recoveryToken){
+        delete user.dataValues.recoveryToken; // Eliminar recoveryToken de los datos retornados por insomnia (seguridad)
+      }
       return{  // Retornar usuario y token firmado/validado
         user,
         token
@@ -60,11 +63,12 @@ class AuthService {
     if (foundUser) {
       // GENERAR LINK
       const payload= {sub: foundUser.id}; // Payload generado apartir del id del usuario
-      const token = jwt.sign(payload,config.recoverySecret, {expiresIn: '15min'}); /* Token TEMPORAL (15 minutos luego de enviar el correo) generado apartir del del payload y palabra secreta (variable de entorno RECOVERY_SECRET - configurada como recoverySecret) */
-      const link = `http://frontendurl.com/recovery?token=${token}`; // Link generado a partir del token
+      const recoveryToken = jwt.sign(payload,config.recoverySecret, {expiresIn: '15min'}); /* Token TEMPORAL (15 minutos luego de enviar el correo) generado apartir del del payload y palabra secreta (variable de entorno RECOVERY_SECRET - configurada como recoverySecret) */
+      const link = `http://frontendurl.com/recovery?token=${recoveryToken}`; // Link generado a partir del token
 
-      // Guardar token en la tabla de usuarios  - campo: 'recovery_token' - atributo recoveryToken
-      await service.update(foundUser.id, {recoveryToken: token});
+      // Guardar token en la tabla de usuarios utilizando el servicio 'update'  - campo: 'recovery_token' - atributo recoveryToken
+      await service.update(foundUser.id, {recoveryToken: recoveryToken});
+      console.log(foundUser.recoveryToken);
       /* sintaxis
       await service.update(Identificador, {atributoTabla: valueAtributo});
       Identificador: Este atributo se utilizara para identificar donde iran los cambios (id del usuario)
@@ -103,8 +107,35 @@ class AuthService {
 
   const info = await transporter.sendMail(infoMail);
 
-  return { message: 'Mensaje enviado... ID: ' + info.messageId};
-  // return console.log('\nMensaje enviado');
+  //return { message: 'Mensaje enviado... ID: ' + info.messageId}; //(TESTING)
+  return console.log('\nMensaje enviado');
+  }
+
+  async changePassword(token, newPassword){
+    try {
+      const payload = jwt.verify(token,config.recoverySecret); /* La funcion 'verify' del modulo passport-jwt se encarga de decifrar el payload segun el token y palabra-secreta utilizada (VER token-verify.js) */
+      // console.log(payload); // (TESTING)
+      const foundUser = await service.findOne(payload.sub); /* El servicio 'findOne' busca el PRIMER usuario que corresponda a este 'id' (recordar que dentro del 'sub' de un 'payload' se encuentra el 'id' del usuario, el userId es unico) */
+      // console.log('\n foundUser \n'); // (TESTING)
+      if(foundUser.recoveryToken !== token){
+        /* Este condicional compara el token recibido como parametro de entrada por la funcion async 'changePassword' con el recoveryToken que tiene el usuario en la base de datos. Si el token es valido pero no coincide con el de la base de datos se enviara error*/
+
+        /* TESTING: Nunca llega a este condicional debido a que si el token expiro o es distinto SE GENERARA UN ERROR INMEDIATO EN EL PAYLOAD (primera linea de codigo) */
+        //throw boom.unauthorized('TOKEN INCORRECTO'); // (TESTING)
+        throw boom.unauthorized();
+      }
+      const hash = await bcrypt.hash(newPassword, 10); // Aplicar 'hash' al nuevo password utilizando la funcion 'hash' de 'bcrypt' (VER pass-hash.example.js)
+      //console.log('\n hash \n'); // (TESTING)
+      await service.update(foundUser.id, {recoveryToken: null , password: hash}); // Guardar el nuevo password hashed en la tabla de usuarios utilizando el servicio 'update'  - campo: 'password' ... Cambiar el token de recuperacion a nulo para que no se pueda volver a usar - campo: 'recovery_token' - atributo recoveryToken
+
+      //console.log('\n guardar \n'); // (TESTING)
+      //return { message : 'Password cambiado - token:' + token + ' eliminado'} //(TESTING)
+
+      return { message : 'Password cambiado'} // Mensaje notificando que el password y el token (literal) fueron cambiados
+    } catch (error) {
+      //throw boom.unauthorized('ERROR GENERAL'); // (TESTING)
+      throw boom.unauthorized();
+    }
   }
 }
 

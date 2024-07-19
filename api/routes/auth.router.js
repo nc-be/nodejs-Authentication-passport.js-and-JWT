@@ -42,12 +42,30 @@ router.post('/login',
   }
 );
 
+// Esta ruta se utiliza en caso de que el usuario desea recuperar su password
 router.post('/recovery',
   async (req, res, next) =>
   {
     try {
       const { email } = req.body;
       const rta = await service.sendRecoveryLink(email);
+      res.json(rta);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Esta ruta se utiliza unicamente luego de que el usuario genere y se acceda al link de recuperacion del password enviado a su email.
+
+// NOTA: Falta capa de validacion de datos (token y newPassword) - EJ (pass): Generar un esquema en joi que valide que el newPassword cumpla un minimo/maximo numero de caracteres
+router.post('/change',
+  async (req, res, next) =>
+  {
+    try {
+      const { token, newPassword } = req.body;
+      //console.log('\nRecoveryToken: ' + token + '\n'); //(TESTING)
+      const rta = await service.changePassword(token,newPassword);
       res.json(rta);
     } catch (error) {
       next(error);

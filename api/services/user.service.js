@@ -4,7 +4,6 @@ const pool = require('../libs/postgres.pool');  // LLAMAR LA LIBRERIA 'postgres.
 const { models } = require('./../libs/sequelize'); // LLAMAR LOS MODELOS CREADOS AL HACER init DE LA FUNCION setupModels UTILIZANDO sequelize
 
 const bcrypt = require('bcrypt'); // NECESARIO PARA HACER HASHING DE CONTRASEÑAS
-const { DatabaseModule } = require('@faker-js/faker');
 
 class UserService {
   constructor() {
